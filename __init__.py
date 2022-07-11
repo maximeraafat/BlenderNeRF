@@ -5,13 +5,12 @@ from . import sof_ui, sof_operator
 
 bl_info = {
     'name': 'Blender x NeRF',
-    'description': 'Simple and quick dataset creation tool to use NeRF',
+    'description': 'Simple and quick NeRF dataset creation tool',
     'author': 'Maxime Raafat',
     'version': (1, 0, 0),
     'blender': (3, 0, 0),
     'location': '3D View > N panel > Blender x NeRF',
-    'warning': 'T.B.D.',
-    'doc_url': 'upcoming github repository',
+    'doc_url': 'https://github.com/maximeraafat/BlenderNeRF',
     'category': 'Object',
 }
 
