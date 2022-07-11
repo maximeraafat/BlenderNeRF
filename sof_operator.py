@@ -1,6 +1,7 @@
 import os
 import math
 import json
+import shutil
 import bpy
 
 
@@ -150,6 +151,9 @@ class SubsetOfFrames(bpy.types.Operator):
                 scene.frame_step = scene.train_frame_steps # update frame step
                 scene.render.filepath = os.path.join(output_train, '') # training frames path
                 bpy.ops.render.render('INVOKE_DEFAULT', animation=True, write_still=True) # render scene
+
+        # compress dataset
+        shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
 
         self.report({'INFO'}, 'Done!')
 
