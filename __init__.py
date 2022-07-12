@@ -1,3 +1,5 @@
+import os
+import shutil
 import bpy
 from bpy.app.handlers import persistent
 from . import sof_ui, sof_operator
@@ -15,14 +17,12 @@ bl_info = {
 }
 
 
-# global addon script variable
-OUTPUT_DIR = 'nerf_dataset'
-
 # addon blender properties
 PROPS = [
     ('train_frame_steps', bpy.props.IntProperty(name='Frame Step', description='Number of frames to skip forward for the NeRF training dataset created while rendering/playing back each frame', default=3, soft_min=1) ),
     ('render_frames', bpy.props.BoolProperty(name='Render Frames', description='Whether the training frames for NeRF should be rendered or not, in which case only the transforms.json files will be generated', default=True) ),
-    ('save_path', bpy.props.StringProperty(name='Save Path', description='Output Directory. The training and testing data will be stored under <save path>/%s' % OUTPUT_DIR, subtype='DIR_PATH') ),
+    ('save_path', bpy.props.StringProperty(name='Save Path', description='Path to the output directory in which the dataset will be stored', subtype='DIR_PATH') ),
+    ('dataset_name', bpy.props.StringProperty(name='Name', description='Name of the dataset : the data will be stored under <save path>/<name>', default='dataset') ),
     ('aabb', bpy.props.IntProperty(name='AABB', description='AABB scale as defined in Instant NGPs NeRF version', default=4, soft_min=1, soft_max=128) ),
     ('train_data', bpy.props.BoolProperty(name='Train', description='Construct training data', default=True) ),
     ('test_data', bpy.props.BoolProperty(name='Test', description='Construct testing data', default=True) ),
@@ -42,9 +42,17 @@ CLASSES = [
 
 # set frame step and filepath back to initial
 @persistent
-def set_to_init(scene):
+def post_render(scene):
     scene.frame_step = scene.init_frame_step
     scene.render.filepath = scene.init_output_path
+
+    # clean directory name (unsupported characters replaced) and output path
+    output_dir = bpy.path.clean_name(scene.dataset_name)
+    output_path = os.path.join(scene.save_path, output_dir)
+
+    # compress dataset and remove folder (only keep zip)
+    shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
+    shutil.rmtree(output_path)
 
 # set initial property values (bpy.data and bpy.context require a loaded scene)
 @persistent
@@ -54,8 +62,10 @@ def set_init_props(scene):
     default_save_path = filepath[:-len(filename)] # remove file name from blender file path = directoy path
 
     scene.save_path = default_save_path
-    scene.init_frame_step = bpy.context.scene.frame_step
-    scene.init_output_path = bpy.context.scene.render.filepath
+    scene.init_frame_step = scene.frame_step
+    scene.init_output_path = scene.render.filepath
+
+    bpy.app.handlers.depsgraph_update_post.remove(set_init_props)
 
 
 # load addon
@@ -66,21 +76,21 @@ def register():
     for cls in CLASSES:
         bpy.utils.register_class(cls)
 
-    bpy.app.handlers.render_complete.append(set_to_init)
-    bpy.app.handlers.render_cancel.append(set_to_init)
-    bpy.app.handlers.load_post.append(set_init_props)
+    bpy.app.handlers.render_complete.append(post_render)
+    bpy.app.handlers.render_cancel.append(post_render)
+    bpy.app.handlers.depsgraph_update_post.append(set_init_props)
 
 # deregister addon
 def unregister():
     for (prop_name, _) in PROPS:
         delattr(bpy.types.Scene, prop_name)
 
+    bpy.app.handlers.render_complete.remove(post_render)
+    bpy.app.handlers.render_cancel.remove(post_render)
+    # bpy.app.handlers.depsgraph_update_post.remove(set_init_props)
+
     for cls in CLASSES:
         bpy.utils.unregister_class(cls)
-
-    bpy.app.handlers.render_complete.remove(set_to_init)
-    bpy.app.handlers.render_cancel.remove(set_to_init)
-    bpy.app.handlers.load_post.remove(set_init_props)
 
 
 if __name__ == '__main__':

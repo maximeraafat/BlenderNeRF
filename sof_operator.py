@@ -6,9 +6,6 @@ import bpy
 
 
 # global addon script variables
-OUTPUT_DIR = 'nerf_dataset'
-OUTPUT_DIR_TRAIN = OUTPUT_DIR + '_train'
-OUTPUT_DIR_TEST = OUTPUT_DIR + '_test'
 OUTPUT_TRAIN = 'images_train'
 OUTPUT_TEST = 'images_test'
 
@@ -127,11 +124,16 @@ class SubsetOfFrames(bpy.types.Operator):
 
         output_data = self.get_camera_intrinsics(scene, camera)
 
-        # set path
-        output_path = os.path.join(scene.save_path, OUTPUT_DIR)
+        # clean directory name (unsupported characters replaced) and output path
+        output_dir = bpy.path.clean_name(scene.dataset_name)
+        output_path = os.path.join(scene.save_path, output_dir)
+
+        # initial property values might have changed since depsgraph_update_post handler
+        scene.init_frame_step = scene.frame_step
+        scene.init_output_path = scene.render.filepath
 
         if scene.test_data:
-            output_test_path = os.path.join(output_path, OUTPUT_DIR_TEST)
+            output_test_path = os.path.join(output_path, '%s_test' % output_dir)
             os.makedirs(output_test_path, exist_ok=True)
 
             # testing transforms
@@ -139,7 +141,7 @@ class SubsetOfFrames(bpy.types.Operator):
             self.save_json(output_test_path, 'transforms_test.json', output_data)
 
         if scene.train_data:
-            output_train_path = os.path.join(output_path, OUTPUT_DIR_TRAIN)
+            output_train_path = os.path.join(output_path, '%s_train' % output_dir)
             output_train = os.path.join(output_train_path, OUTPUT_TRAIN)
             os.makedirs(output_train, exist_ok=True)
 
@@ -152,9 +154,10 @@ class SubsetOfFrames(bpy.types.Operator):
                 scene.render.filepath = os.path.join(output_train, '') # training frames path
                 bpy.ops.render.render('INVOKE_DEFAULT', animation=True, write_still=True) # render scene
 
-        # compress dataset
-        shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
-
-        self.report({'INFO'}, 'Done!')
+        # if frames are rendered, the below code is executed by the handler function
+        if not scene.render_frames:
+            # compress dataset and remove folder (only keep zip)
+            shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
+            shutil.rmtree(output_path)
 
         return {'FINISHED'}

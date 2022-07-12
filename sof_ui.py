@@ -27,6 +27,7 @@ class SOF_UI(bpy.types.Panel):
         layout.prop(scene, 'train_frame_steps')
         layout.prop(scene, 'render_frames')
         layout.prop(scene, 'save_path')
+        layout.prop(scene, 'dataset_name')
 
         layout.use_property_split = True
         layout.operator('object.subset_of_frames', text='PLAY SOF')
