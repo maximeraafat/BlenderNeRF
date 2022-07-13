@@ -4,13 +4,22 @@
 
 This quick and user friendly tool attempts to narrow the gap between the artistic creation process and state-of-the-art research in computer graphics and vision.
 
-SHOW GIF RESULTS
+<p align='center'>
+  <img src='https://maximeraafat.github.io/assets/posts/donut_3/Donut3_compressed.gif' width='400'/>
+  <img src='https://maximeraafat.github.io/assets/posts/donut_3/Donut3_NeRF_compressed.gif' width='400'>
+  <br>
+  <b>
+    Left : traditional rendering with Eevee renderer
+    <br>
+    Right : NeRF-predicted images
+  </b>
+</p>
 
 ## Motivation
 
-Rendering is a computationally intensive process ; generarting photorealistic scenes can take seconds to hours depending on the scene complexity, hardware properties and the computational resources available to the 3D software.
+Rendering is a computationally intensive process ; generating photorealistic scenes can take seconds to hours depending on the scene complexity, hardware properties and the computational resources available to the 3D software.
 
-While obtaining renderings might be considered a straight forward process for 3D artists, obtaining the additional camera information necessary for NeRF can be discouraging, even for python familiar users or machine learning developers. This add-on aims at solving this issue, enabling artists to easily integrate AI in their creative flow while also faciliating research.
+While obtaining renderings might be considered a straight forward process for 3D artists, obtaining the additional camera information necessary for NeRF can be discouraging, even for python familiar users or machine learning developers. This add-on aims at solving this issue, enabling artists to easily integrate AI in their creative flow while also facilitating research.
 
 
 ## Installation
