@@ -1,6 +1,6 @@
-# Blender $\times$ NeRF
+# Blender x NeRF
 
-**Blender $\times$ NeRF** is a Blender add-on for creating virtual datasets, leveraged by an AI to synthesize images from unseen viewpoints. The constructed datasets can directly be utilised for training and testing a *Neural Radiance Field ([NeRF](https://www.matthewtancik.com/nerf))* model, yielding AI predicted images in a matter of seconds.
+**Blender x NeRF** is a Blender add-on for creating virtual datasets, leveraged by an AI to synthesize images from unseen viewpoints. The constructed datasets can directly be utilised for training and testing a *Neural Radiance Field ([NeRF](https://www.matthewtancik.com/nerf))* model, yielding AI predicted images in a matter of seconds.
 
 This quick and user friendly tool attempts to narrow the gap between the artistic creation process and state-of-the-art research in computer graphics and vision.
 
@@ -9,7 +9,7 @@ This quick and user friendly tool attempts to narrow the gap between the artisti
 
 Rendering is a computationally intensive process ; generarting photorealistic scenes can take seconds to hours depending on the scene complexity, hardware properties and the computational resources available to the 3D software.
 
-While obtaining renders might be considered a straight forward process for 3D artists, obtaining the additional camera information necessary for NeRF can be discouraging, even for python familiar users or machine learning developers. This add-on aims at solving this issue, enabling artists to easily integrate AI in their creative flow while also faciliating research.
+While obtaining renderings might be considered a straight forward process for 3D artists, obtaining the additional camera information necessary for NeRF can be discouraging, even for python familiar users or machine learning developers. This add-on aims at solving this issue, enabling artists to easily integrate AI in their creative flow while also faciliating research.
 
 SHOW GIF RESULTS
 
@@ -19,13 +19,13 @@ SHOW GIF RESULTS
 1. Download this repository as a ZIP file
 2. Open Blender (3.0.0 or above. For previous versions, see the [Upcoming](#upcoming) section)
 3. In Blender, head to *Edit > Preferences > Add-ons*, and click *Install...*
-4. Select the downloaded ZIP file, and activate the add-on (Object: Blender $\times$ NeRF)
+4. Select the downloaded ZIP file, and activate the add-on (Object: Blender x NeRF)
 
 
 ## Setting
 
-**Blender $\times$ NeRF** proposes 3 settings, which are discussed in the sub-sections below. From now on when mentioning *training* data, I will refer to the data required by NeRF to *train* (or teach) the AI model. Similarly, the *testing* data will refer to the images predicted by the AI.
-Each of the 3 settings generate an archived ZIP file, contaning a training and testing folder. Both folders contain a `transforms_train.json` file, respectively `transforms_test.json` file, with the necessary camera information for NeRF to properly train and test on images.
+**Blender x NeRF** proposes 3 settings, which are discussed in the sub-sections below. From now on when mentioning *training* data, I will refer to the data required by NeRF to *train* (or teach) the AI model. Similarly, the *testing* data will refer to the images predicted by the AI.
+When executed, each of the 3 settings generate an archived ZIP file, contaning a training and testing folder. Both folders contain a `transforms_train.json` file, respectively `transforms_test.json` file, with the necessary camera information for NeRF to properly train and test on images.
 
 ### SOF : Subset of Frames
 
@@ -37,12 +37,12 @@ TTC registers training and testing data from two separate user defined cameras. 
 
 ### COS : Camera on Sphere (upcoming)
 
-COS renders frames from random views on a sphere while looking at its center, with user defined radius and center location. Those frames will then serve as training frames for NeRF. Testing frames are still to be decided (perhaps a predefined spherical trajectory, or a user defined camera path).
+COS renders frames from random views on a sphere while looking at its center, with user defined radius and center location. Those frames will then serve as training data for NeRF. Testing frames are still to be decided (perhaps a predefined spherical trajectory, or a user defined camera path).
 
 
 ## How to use the add-on
 
-The add-on properties panel is available under `3D View > N panel > Blender x NeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 categories (SOF, TTC and COS) have a similar user interfance with shared properties (accessible with clickable buttons or sliders) discussed below.
+The add-on properties panel is available under `3D View > N panel > Blender x NeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 categories (**SOF**, **TTC** and **COS**) have a similar user interfance with shared properties (accessible with clickable buttons or sliders) discussed below.
 
 * `Train` (activated by default) : whether to register training data (camera information + renderings)
 * `Test` (activated by default) : whether to register testing data (camera information only)
@@ -72,10 +72,10 @@ Below, you can find properties specific to each category.
 
 As already specified in the previous section, the add-on currently only supports *NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)* version of NeRF. Feel free to visit their repository for detailled instructions on how to obtain realistic predicted images, or technicalities on their lightning fast NeRF implementation. Below you can find some quick tips for optimal training and testing of NeRF.
 
-* NeRF trains best with between 50 to 150 images
-* Testing views should not deviate to much from training views
-* Scene movement, motion blur or blurring artefacts and scene background degrade the predicted quality, avoid them if possible.
-* The object should be at least one Blender unit away from the camera : the closer the object is to the camera, the lower you can set `AABB`
+* NeRF trains best with 50 to 150 images
+* Testing views should not deviate to much from training views (applies especially to TTC)
+* Scene movement, motion blur or blurring artefacts, and scene background degrade the predicted quality. Avoid them if possible.
+* The object should be at least one Blender unit away from the camera : the closer the object is to the camera, the lower you can set `AABB`. A lower value will accelerate the training
 * If the predicted quality seems blurry, start with changing `AABB` (to larger or lower values). `AABB` has to be a power of 2!
 
 
@@ -85,13 +85,13 @@ Now that you finally created the necessary data to run NeRF, it's finally time t
 
 Open this [COLAB notebook](https://drive.google.com/file/d/1Fbd985Bfj7BrTgriwmOKkuh-J40JjYHK/view?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0))and follow the instructions.
 
-Unfortunately, NeRF is not capable of predicting images with a transparent background : NeRF predicts for each pixel a color and a density. A transparent background would mean an invalid density value, therefore explaining the monochrome background color. If you want to remove the background, you can apply a simple Blender mask which removes pixel values above or below a certain color threshold.
+Unfortunately, NeRF is not capable of predicting images with a transparent background : NeRF predicts for each pixel a color and a density. A transparent background would result in an invalid density value, therefore explaining the monochrome background color. If you want to remove the background, you can apply a simple Blender mask to your predicted images, to remove pixel values above or below a certain color threshold.
 
 ## Upcoming
-* If SOF and TOC, if frames with the same properties were already rendered, possibilty to copy the already rendered frames to the dataset, instead of rendering them again
+* For SOF and TOC, if frames have already been rendered, enable the possibilty to copy the already rendered frames to the dataset instead of rendering them again
 * Support for previous blender versions
-* TOC setting (version 2.0)
-* COS setting (version 3.0)
+* TOC setting (add-on release version 2.0)
+* COS setting (add-on release version 3.0)
 * Support for other NeRF implementations, for example [Torch NGP](https://github.com/ashawkey/torch-ngp)?
 <!--
 * Extend add-on to Blender Market?
