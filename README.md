@@ -95,4 +95,5 @@ Unfortunately, NeRF is not capable of predicting images with a transparent backg
 * Support for other NeRF implementations, for example [Torch NGP](https://github.com/ashawkey/torch-ngp)?
 <!--
 * Extend add-on to Blender Market?
+* Update testing.py to fit current version
 -->
