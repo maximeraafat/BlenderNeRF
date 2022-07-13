@@ -11,7 +11,7 @@ This quick and user friendly tool attempts to narrow the gap between the artisti
   <b>
     Left : traditional rendering with Eevee renderer
     <br>
-    Right : NeRF-predicted images
+    Right : NeRF-synthesized images
   </b>
 </p>
 
