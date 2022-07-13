@@ -150,6 +150,7 @@ class SubsetOfFrames(bpy.types.Operator):
             self.save_json(output_train_path, 'transforms_train.json', output_data)
 
             if scene.render_frames:
+                scene.is_rendering = True
                 scene.frame_step = scene.train_frame_steps # update frame step
                 scene.render.filepath = os.path.join(output_train, '') # training frames path
                 bpy.ops.render.render('INVOKE_DEFAULT', animation=True, write_still=True) # render scene

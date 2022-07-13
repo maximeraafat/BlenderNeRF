@@ -27,6 +27,7 @@ PROPS = [
     ('train_data', bpy.props.BoolProperty(name='Train', description='Construct training data', default=True) ),
     ('test_data', bpy.props.BoolProperty(name='Test', description='Construct testing data', default=True) ),
 
+    ('is_rendering', bpy.props.BoolProperty(name='Is Rendering?', default=False) ),
     ('init_frame_step', bpy.props.IntProperty(name='Init Frame Step') ),
     ('init_output_path', bpy.props.StringProperty(name='Init Output Path', subtype='DIR_PATH') ),
 ]
@@ -43,16 +44,17 @@ CLASSES = [
 # set frame step and filepath back to initial
 @persistent
 def post_render(scene):
-    scene.frame_step = scene.init_frame_step
-    scene.render.filepath = scene.init_output_path
+    if scene.is_rendering: # execute this function only when rendering with addon
+        scene.frame_step = scene.init_frame_step
+        scene.render.filepath = scene.init_output_path
 
-    # clean directory name (unsupported characters replaced) and output path
-    output_dir = bpy.path.clean_name(scene.dataset_name)
-    output_path = os.path.join(scene.save_path, output_dir)
+        # clean directory name (unsupported characters replaced) and output path
+        output_dir = bpy.path.clean_name(scene.dataset_name)
+        output_path = os.path.join(scene.save_path, output_dir)
 
-    # compress dataset and remove folder (only keep zip)
-    shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
-    shutil.rmtree(output_path)
+        # compress dataset and remove folder (only keep zip)
+        shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
+        shutil.rmtree(output_path)
 
 # set initial property values (bpy.data and bpy.context require a loaded scene)
 @persistent
