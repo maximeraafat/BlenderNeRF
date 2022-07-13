@@ -4,14 +4,13 @@
 
 This quick and user friendly tool attempts to narrow the gap between the artistic creation process and state-of-the-art research in computer graphics and vision.
 
+SHOW GIF RESULTS
 
 ## Motivation
 
 Rendering is a computationally intensive process ; generarting photorealistic scenes can take seconds to hours depending on the scene complexity, hardware properties and the computational resources available to the 3D software.
 
 While obtaining renderings might be considered a straight forward process for 3D artists, obtaining the additional camera information necessary for NeRF can be discouraging, even for python familiar users or machine learning developers. This add-on aims at solving this issue, enabling artists to easily integrate AI in their creative flow while also faciliating research.
-
-SHOW GIF RESULTS
 
 
 ## Installation
@@ -81,9 +80,9 @@ As already specified in the previous section, the add-on currently only supports
 
 ## How to run NeRF
 
-Now that you finally created the necessary data to run NeRF, it's finally time to feed the elephant in the room. If you possess an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp) on your own device for an optimal user experience with a GUI, by following the instructions provided in their GitHub repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free (all you need is a Google account).
+Now that you finally created the necessary data to run NeRF, let's dive right into the how-tos. If you possess an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp) on your own device for an optimal user experience with a GUI, by following the instructions provided in their GitHub repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free (all you need is a Google account).
 
-Open this [COLAB notebook](https://drive.google.com/file/d/1Fbd985Bfj7BrTgriwmOKkuh-J40JjYHK/view?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0))and follow the instructions.
+Open this [COLAB notebook](https://drive.google.com/file/d/1Fbd985Bfj7BrTgriwmOKkuh-J40JjYHK/view?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0)) and follow the instructions.
 
 Unfortunately, NeRF is not capable of predicting images with a transparent background : NeRF predicts for each pixel a color and a density. A transparent background would result in an invalid density value, therefore explaining the monochrome background color. If you want to remove the background, you can apply a simple Blender mask to your predicted images, to remove pixel values above or below a certain color threshold.
 
