@@ -104,4 +104,5 @@ Unfortunately, NeRF is not capable of predicting images with a transparent backg
 <!--
 * Extend add-on to Blender Market?
 * Update testing.py to fit current version
+* Once all settings are released : make quick explanatory video
 -->
