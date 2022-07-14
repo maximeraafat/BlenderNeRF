@@ -33,7 +33,7 @@ While obtaining renderings might be considered a straight forward process for 3D
 ## Setting
 
 **Blender x NeRF** proposes 3 settings, which are discussed in the sub-sections below. From now on when mentioning *training* data, I will refer to the data required by NeRF to *train* (or teach) the AI model. Similarly, the *testing* data will refer to the images predicted by the AI.
-When executed, each of the 3 settings generate an archived ZIP file, contaning a training and testing folder. Both folders contain a `transforms_train.json` file, respectively `transforms_test.json` file, with the necessary camera information for NeRF to properly train and test on images.
+When executed, each of the 3 settings generate an archived ZIP file, containing a training and testing folder. Both folders contain a `transforms_train.json` file, respectively `transforms_test.json` file, with the necessary camera information for NeRF to properly train and test on images.
 
 ### SOF : Subset of Frames
 
@@ -50,7 +50,7 @@ COS renders frames from random views on a sphere while looking at its center, wi
 
 ## How to use the add-on
 
-The add-on properties panel is available under `3D View > N panel > Blender x NeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 categories (**SOF**, **TTC** and **COS**) have a similar user interfance with shared properties (accessible with clickable buttons or sliders) discussed below.
+The add-on properties panel is available under `3D View > N panel > Blender x NeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 categories (**SOF**, **TTC** and **COS**) have a similar user interface with shared properties (accessible with clickable buttons or sliders) discussed below.
 
 * `Train` (activated by default) : whether to register training data (camera information + renderings)
 * `Test` (activated by default) : whether to register testing data (camera information only)
@@ -78,7 +78,7 @@ Below, you can find properties specific to each category.
 
 ## Tips for optimal results
 
-As already specified in the previous section, the add-on currently only supports *NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)* version of NeRF. Feel free to visit their repository for detailled instructions on how to obtain realistic predicted images, or technicalities on their lightning fast NeRF implementation. Below you can find some quick tips for optimal training and testing of NeRF.
+As already specified in the previous section, the add-on currently only supports *NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)* version of NeRF. Feel free to visit their repository for detailed instructions on how to obtain realistic predicted images, or technicalities on their lightning fast NeRF implementation. Below are some quick tips for optimal NeRF training and testing.
 
 * NeRF trains best with 50 to 150 images
 * Testing views should not deviate to much from training views (applies especially to TTC)
@@ -96,7 +96,7 @@ Open this [COLAB notebook](https://drive.google.com/file/d/1Fbd985Bfj7BrTgriwmOK
 Unfortunately, NeRF is not capable of predicting images with a transparent background : NeRF predicts for each pixel a color and a density. A transparent background would result in an invalid density value, therefore explaining the monochrome background color. If you want to remove the background, you can apply a simple Blender mask to your predicted images, to remove pixel values above or below a certain color threshold.
 
 ## Upcoming
-* For SOF and TOC, if frames have already been rendered, enable the possibilty to copy the already rendered frames to the dataset instead of rendering them again
+* For SOF and TOC, if frames have already been rendered, enable the possibility to copy the already rendered frames to the dataset instead of rendering them again
 * Support for previous blender versions
 * TOC setting (add-on release version 2.0)
 * COS setting (add-on release version 3.0)
