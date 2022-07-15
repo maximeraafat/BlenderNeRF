@@ -59,7 +59,7 @@ The add-on properties panel is available under `3D View > N panel > Blender x Ne
 * `Save Path` (empty by default) : path to the output directory in which the dataset will be stored
 * `Name` (by default set to *dataset*) : name of the dataset and ZIP file that will be created
 
-The `AABB` property is only available for *NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)* version of NeRF, which currently is the only supported version. Future releases of this add-on might support different versions.
+`AABB` is restricted to be an integer power of 2, and defines the side length of the bounding box volume in which NeRF will trace rays. The property was introduced in *NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)* version of NeRF, which is currently the only supported version. Future releases of this add-on might support different versions.
 
 Please avoid using unsupported characters (such as spaces, #, or /) for `Name`, as those characters will all be replaced by an underscore.
 
@@ -82,18 +82,19 @@ As already specified in the previous section, the add-on currently only supports
 
 * NeRF trains best with 50 to 150 images
 * Testing views should not deviate to much from training views (applies especially to TTC)
-* Scene movement, motion blur or blurring artefacts, and scene background degrade the predicted quality. Avoid them if possible.
-* The object should be at least one Blender unit away from the camera : the closer the object is to the camera, the lower you can set `AABB`. A lower value will accelerate the training
-* If the predicted quality seems blurry, start with changing `AABB` (to larger or lower values). `AABB` has to be a power of 2!
+* Scene movement, motion blur or blurring artefacts, degrade the predicted quality. Avoid them if possible.
+* The object should be at least one Blender unit away from the camera : the closer the object is to the camera, the lower you should set `AABB`. Keep it as low as possible, as higher values will increase the training time
+* If the predicted quality seems blurry, start with adjusting `AABB`, while keeping it a power of 2
+
+Unfortunately, NeRF is not capable of predicting transparent pixels for RGBA images : the method predicts for each pixel a color and a density. Transparency (e.g., under the form of a transparent background) results in invalid density values, causing the transparent background in your training images to be replaced by a monochrome color.
 
 
 ## How to run NeRF
 
-Now that you finally created the necessary data to run NeRF, let's dive right into the how-tos. If you possess an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp) on your own device for an optimal user experience with a GUI, by following the instructions provided in their GitHub repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free (all you need is a Google account).
+If you possess an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp) on your own device for an optimal user experience with a GUI by following the instructions provided in their GitHub repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free (all you need is a Google account).
 
 Open this [COLAB notebook](https://drive.google.com/file/d/1Fbd985Bfj7BrTgriwmOKkuh-J40JjYHK/view?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0)) and follow the instructions.
 
-Unfortunately, NeRF is not capable of predicting images with a transparent background : NeRF predicts for each pixel a color and a density. A transparent background would result in an invalid density value, therefore explaining the monochrome background color. If you want to remove the background, you can apply a simple Blender mask to your predicted images, to remove pixel values above or below a certain color threshold.
 
 ## Upcoming
 * For SOF and TOC, if frames have already been rendered, enable the possibility to copy the already rendered frames to the dataset instead of rendering them again
