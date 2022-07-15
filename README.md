@@ -93,7 +93,7 @@ Unfortunately, NeRF is not capable of predicting transparent pixels for RGBA ima
 
 If you possess an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp) on your own device for an optimal user experience with a GUI by following the instructions provided in their GitHub repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free (all you need is a Google account).
 
-Open this [COLAB notebook](https://drive.google.com/file/d/1Fbd985Bfj7BrTgriwmOKkuh-J40JjYHK/view?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0)) and follow the instructions.
+Open this [COLAB notebook](https://colab.research.google.com/drive/1CtF_0FgwzCZMYQzGXbye2iVS1ZLlq9Tw?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0)) and follow the instructions.
 
 
 ## Upcoming
