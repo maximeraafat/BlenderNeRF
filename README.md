@@ -37,9 +37,9 @@ When executed, each of the 3 methods generate an archived ZIP file, containing a
 
 ### SOF : Subset of Frames
 
-SOF renders every N frames from an animation, and uses those as training data for NeRF. Testing will be executed on all animation frames, that is, both training frames and the remaining ones.
+SOF renders every N frames from a camera animation, and uses those as training data for NeRF. Testing will be executed on all animation frames, that is, both training frames and the remaining ones.
 
-### TTC : Train and Test Cameras (upcoming)
+### TTC : Train and Test Cameras
 
 TTC registers training and testing data from two separate user defined cameras. NeRF will then train on all animation frames rendered with the training camera, and predict all frames seen by the testing camera.
 
@@ -50,28 +50,32 @@ COS renders frames from random views on a sphere while looking at its center, wi
 
 ## How to use the add-on
 
-The add-on properties panel is available under `3D View > N panel > BlenderNeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 methods (**SOF**, **TTC** and **COS**) have a similar user interface with shared properties (accessible with clickable buttons or sliders) discussed below.
+The add-on properties panel is available under `3D View > N panel > BlenderNeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 methods (**SOF**, **TTC** and **COS**) share a common tab called `Blender x NeRF shared UI`, which appears per default at the top of add-on panel. The shared tab contains the below listed controllable properties.
 
 * `Train` (activated by default) : whether to register training data (camera information + renderings)
 * `Test` (activated by default) : whether to register testing data (camera information only)
 * `AABB` (by default set to *4*) : aabb scale parameter as described in Instant NGP (more details below)
 * `Render Frames` (activated by default) : whether to render the frames
 * `Save Path` (empty by default) : path to the output directory in which the dataset will be stored
-* `Name` (by default set to *dataset*) : name of the dataset and ZIP file that will be created
+
 
 `AABB` is restricted to be an integer power of 2, and defines the side length of the bounding box volume in which NeRF will trace rays. The property was introduced in *NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)* version of NeRF, which is currently the only supported version. Future releases of this add-on might support different versions.
 
-Please avoid using unsupported characters (such as spaces, #, or /) for `Name`, as those characters will all be replaced by an underscore.
+Notice that each method has a `Name` property (by default set to *dataset*), which corresponds to the name of the dataset and ZIP file that will be created for the respective method. Each method can set a different dataset name, without affecting the `Name` properties of the other methods. Please avoid using unsupported characters (such as spaces, #, or /), as those characters will all be replaced by an underscore.
 
-Below, you can find properties specific to each method.
+Below are described the properties specific to each method (the `Name` property is left out, as discussed above).
 
 ### How to SOF
 
-* `Camera` (always set to the activated camera) : camera used for registering training and testing data
 * `Frame Step` (by default set to *3*) : N (as defined in the [Setting](#setting)) = frequency at which we render the frames for training
-* `PLAY SOF` : play the *Subset of Frames* add-on
+* `Camera` (always set to the activate camera) : camera used for registering training and testing data
+* `PLAY SOF` : play the *Subset of Frames* method
 
-### How to TTC (upcoming)
+### How to TTC
+
+* `Train Cam` (empty by default) : camera used for registering the training data
+* `Test Cam` (empty by default) : camera used for registering the testing data
+* `PLAY TTC` : play the *Train and Test Cameras* method
 
 ### How to COS (upcoming)
 
@@ -85,6 +89,7 @@ As already specified in the previous section, the add-on currently only supports
 * Scene movement, motion blur or blurring artefacts, degrade the predicted quality. Avoid them if possible.
 * The object should be at least one Blender unit away from the camera : the closer the object is to the camera, the lower you should set `AABB`. Keep it as low as possible, as higher values will increase the training time
 * If the predicted quality seems blurry, start with adjusting `AABB`, while keeping it a power of 2
+* Do not adjust the camera focal length during the animation, as Instant NGP only supports a single focal length as input to NeRF
 
 Unfortunately, NeRF is not capable of predicting transparent pixels for RGBA images : the method predicts for each pixel a color and a density. Transparency (e.g., under the form of a transparent background) results in invalid density values, causing the transparent background in your training images to be replaced by a monochrome color.
 
