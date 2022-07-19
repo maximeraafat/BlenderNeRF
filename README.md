@@ -32,8 +32,8 @@ While obtaining renderings might be considered a straight forward process for 3D
 
 ## Setting
 
-**Blender x NeRF** proposes 3 settings, which are discussed in the sub-sections below. From now on when mentioning *training* data, I will refer to the data required by NeRF to *train* (or teach) the AI model. Similarly, the *testing* data will refer to the images predicted by the AI.
-When executed, each of the 3 settings generate an archived ZIP file, containing a training and testing folder. Both folders contain a `transforms_train.json` file, respectively `transforms_test.json` file, with the necessary camera information for NeRF to properly train and test on images.
+**Blender x NeRF** proposes 3 methods, which are discussed in the sub-sections below. From now on when mentioning *training* data, I will refer to the data required by NeRF to *train* (or teach) the AI model. Similarly, the *testing* data will refer to the images predicted by the AI.
+When executed, each of the 3 methods generate an archived ZIP file, containing a training and testing folder. Both folders contain a `transforms_train.json` file, respectively `transforms_test.json` file, with the necessary camera information for NeRF to properly train and test on images.
 
 ### SOF : Subset of Frames
 
@@ -50,7 +50,7 @@ COS renders frames from random views on a sphere while looking at its center, wi
 
 ## How to use the add-on
 
-The add-on properties panel is available under `3D View > N panel > Blender x NeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 categories (**SOF**, **TTC** and **COS**) have a similar user interface with shared properties (accessible with clickable buttons or sliders) discussed below.
+The add-on properties panel is available under `3D View > N panel > BlenderNeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 methods (**SOF**, **TTC** and **COS**) have a similar user interface with shared properties (accessible with clickable buttons or sliders) discussed below.
 
 * `Train` (activated by default) : whether to register training data (camera information + renderings)
 * `Test` (activated by default) : whether to register testing data (camera information only)
@@ -63,7 +63,7 @@ The add-on properties panel is available under `3D View > N panel > Blender x Ne
 
 Please avoid using unsupported characters (such as spaces, #, or /) for `Name`, as those characters will all be replaced by an underscore.
 
-Below, you can find properties specific to each category.
+Below, you can find properties specific to each method.
 
 ### How to SOF
 
@@ -97,13 +97,8 @@ Open this [COLAB notebook](https://colab.research.google.com/drive/1CtF_0FgwzCZM
 
 
 ## Upcoming
-* For SOF and TOC, if frames have already been rendered, enable the possibility to copy the already rendered frames to the dataset instead of rendering them again
 * Support for previous blender versions
-* TOC setting (add-on release version 2.0)
-* COS setting (add-on release version 3.0)
+* If frames have already been rendered, enable the possibility to copy the already rendered frames to the dataset instead of rendering them again
+* COS method (add-on release version 3.0)
 * Support for other NeRF implementations, for example [Torch NGP](https://github.com/ashawkey/torch-ngp)?
-<!--
-* Extend add-on to Blender Market?
-* Update testing.py to fit current version
-* Once all settings are released : make quick explanatory video
--->
+* Once all methods are released : publish simple explanatory tutorial video
