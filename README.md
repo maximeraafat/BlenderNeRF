@@ -50,7 +50,7 @@ COS renders frames from random views on a sphere while looking at its center, wi
 
 ## How to use the add-on
 
-The add-on properties panel is available under `3D View > N panel > BlenderNeRF` (The N panel is accessible under the 3D viewport when pressing *N*). All 3 methods (**SOF**, **TTC** and **COS**) share a common tab called `Blender x NeRF shared UI`, which appears per default at the top of add-on panel. The shared tab contains the below listed controllable properties.
+The add-on properties panel is available under `3D View > N panel > BlenderNeRF` (the N panel is accessible under the 3D viewport when pressing *N*). All 3 methods (**SOF**, **TTC** and **COS**) share a common tab called `Blender x NeRF shared UI`, which appears per default at the top of the add-on panel. The shared tab contains the below listed controllable properties.
 
 * `Train` (activated by default) : whether to register training data (camera information + renderings)
 * `Test` (activated by default) : whether to register testing data (camera information only)
@@ -61,9 +61,9 @@ The add-on properties panel is available under `3D View > N panel > BlenderNeRF`
 
 `AABB` is restricted to be an integer power of 2, and defines the side length of the bounding box volume in which NeRF will trace rays. The property was introduced in *NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)* version of NeRF, which is currently the only supported version. Future releases of this add-on might support different versions.
 
-Notice that each method has a `Name` property (by default set to *dataset*), which corresponds to the name of the dataset and ZIP file that will be created for the respective method. Each method can set a different dataset name, without affecting the `Name` properties of the other methods. Please avoid using unsupported characters (such as spaces, #, or /), as those characters will all be replaced by an underscore.
+Notice that each method has its separate distinctive `Name` property (by default set to *dataset*), which corresponds to the name of the dataset and ZIP file that will be created for the respective method. Customizing the dataset name for one method will not affect the other method's `Name` properties. Please avoid using unsupported characters (such as spaces, #, or /), as those characters will all be replaced by an underscore.
 
-Below are described the properties specific to each method (the `Name` property is left out, as discussed above).
+Below are described the properties specific to each method (the `Name` property is left out, as already discussed above).
 
 ### How to SOF
 
