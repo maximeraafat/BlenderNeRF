@@ -19,7 +19,7 @@ This quick and user friendly tool attempts to narrow the gap between the artisti
 
 Rendering is a computationally intensive process ; generating photorealistic scenes can take seconds to hours depending on the scene complexity, hardware properties and the computational resources available to the 3D software.
 
-While obtaining renderings might be considered a straight forward process for 3D artists, obtaining the additional camera information necessary for NeRF can be discouraging, even for python familiar users or machine learning developers. This add-on aims at solving this issue, enabling artists to easily integrate AI in their creative flow while also facilitating research.
+While rendering might be considered a straight forward process for 3D artists, obtaining the additional camera information necessary for NeRF can be discouraging, even for python familiar users or machine learning developers. This add-on aims at solving this issue, enabling artists to easily integrate AI in their creative flow while also facilitating research.
 
 
 ## Installation
@@ -33,7 +33,7 @@ While obtaining renderings might be considered a straight forward process for 3D
 ## Setting
 
 **Blender x NeRF** proposes 3 methods, which are discussed in the sub-sections below. From now on when mentioning *training* data, I will refer to the data required by NeRF to *train* (or teach) the AI model. Similarly, the *testing* data will refer to the images predicted by the AI.
-When executed, each of the 3 methods generate an archived ZIP file, containing a training and testing folder. Both folders contain a `transforms_train.json` file, respectively `transforms_test.json` file, with the necessary camera information for NeRF to properly train and test on images.
+When executed, each of the 3 methods generates an archived ZIP file, containing a training and testing folder. Both folders contain a `transforms_train.json` file, respectively `transforms_test.json` file, with the necessary camera information for NeRF to properly train and test on images.
 
 ### SOF : Subset of Frames
 
@@ -107,3 +107,6 @@ Open this [COLAB notebook](https://colab.research.google.com/drive/1CtF_0FgwzCZM
 * COS method (add-on release version 3.0)
 * Support for other NeRF implementations, for example [Torch NGP](https://github.com/ashawkey/torch-ngp)?
 * Once all methods are released : publish simple explanatory tutorial video
+<!--
+* Enable user defined NeRF resolution in Notebook and COLAB : if set to 0, use Blender scene resolution
+-->

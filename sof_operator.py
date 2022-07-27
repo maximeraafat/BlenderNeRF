@@ -18,6 +18,11 @@ class SubsetOfFrames(blender_nerf_operator.BlenderNeRF_Operator):
         scene = context.scene
         camera = scene.camera
 
+        # check if camera is selected : next errors depend on an existing camera
+        if camera == None:
+            self.report({'ERROR'}, 'Be sure to have a selected camera!')
+            return {'FINISHED'}
+
         # if there is an error, print first error message
         error_messages = self.asserts(scene, method='SOF')
         if len(error_messages) > 0:

@@ -21,6 +21,11 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         train_camera = scene.camera_train_target
         test_camera = scene.camera_test_target
 
+        # check if cameras are selected : next errors depend on existing cameras
+        if train_camera == None or test_camera == None:
+            self.report({'ERROR'}, 'Be sure to have selected a train and test camera!')
+            return {'FINISHED'}
+
         # if there is an error, print first error message
         error_messages = self.asserts(scene, method='TTC')
         if len(error_messages) > 0:
