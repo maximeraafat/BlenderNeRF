@@ -9,20 +9,11 @@ OUTPUT_TRAIN = 'images_train'
 OUTPUT_TEST = 'images_test'
 
 
-# helper function
-def listify_matrix(matrix):
-    matrix_list = []
-    for row in matrix:
-        matrix_list.append(list(row))
-    return matrix_list
-
-
 # blender nerf operator parent class
 class BlenderNeRF_Operator(bpy.types.Operator):
 
-    # camera intrinsics and other relevant camera data
-    # https://blender.stackexchange.com/questions/38009/3x4-camera-matrix-from-blender-camera
-    def get_camera_intrinsics(self, scene, camera):
+    # camera intrinsics : https://blender.stackexchange.com/questions/38009/3x4-camera-matrix-from-blender-camera
+    def get_camera_intrinsics(self, scene,camera):
         camera_angle_x = camera.data.angle_x
         camera_angle_y = camera.data.angle_y
 
@@ -76,16 +67,18 @@ class BlenderNeRF_Operator(bpy.types.Operator):
 
         initFrame = scene.frame_current
         step = scene.train_frame_steps if (mode == 'TRAIN' and method == 'SOF') else scene.frame_step
+        start = 1 if (mode == 'TRAIN' and method == 'COS') else scene.frame_start
+        end = scene.nb_frames if (mode == 'TRAIN' and method == 'COS') else scene.frame_end
 
         camera_extr_dict = []
-        for frame in range(scene.frame_start, scene.frame_end + 1, step):
+        for frame in range(start, end + 1, step):
             scene.frame_set(frame)
             filename = os.path.basename( scene.render.frame_path(frame=frame) )
             filedir = OUTPUT_TRAIN * (mode == 'TRAIN') + OUTPUT_TEST * (mode == 'TEST')
 
             frame_data = {
                 'file_path': os.path.join(filedir, filename),
-                'transform_matrix': listify_matrix( camera.matrix_world )
+                'transform_matrix': self.listify_matrix( camera.matrix_world )
             }
 
             camera_extr_dict.append(frame_data)
@@ -102,6 +95,14 @@ class BlenderNeRF_Operator(bpy.types.Operator):
     def is_power_of_two(self, x):
         return math.log2(x).is_integer()
 
+    # function from original nerf 360_view.py code for blender
+    def listify_matrix(self, matrix):
+        matrix_list = []
+        for row in matrix:
+            matrix_list.append(list(row))
+        return matrix_list
+
+    # assert messages
     def asserts(self, scene, method='SOF'):
         assert method == 'SOF' or method == 'TTC' or method == 'COS'
 
@@ -109,18 +110,23 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         train_camera = scene.camera_train_target
         test_camera = scene.camera_test_target
 
+        sof_name = scene.sof_dataset_name
+        ttc_name = scene.ttc_dataset_name
+        cos_name = scene.cos_dataset_name
+
         error_messages = []
 
-        if method == 'SOF':
-            if not camera.data.type == 'PERSP':
-                error_messages.append('Only perspective cameras are supported!')
-            if scene.sof_dataset_name == '':
-                error_messages.append('Dataset name cannot be empty!')
-        elif method == 'TTC':
-            if not (train_camera.data.type == 'PERSP' and test_camera.data.type == 'PERSP'):
-                error_messages.append('Only perspective cameras are supported!')
-            if scene.ttc_dataset_name == '':
-                error_messages.append('Dataset name cannot be empty!')
+        if (method == 'SOF' or method == 'COS') and not camera.data.type == 'PERSP':
+            error_messages.append('Only perspective cameras are supported!')
+
+        if method == 'TTC' and not (train_camera.data.type == 'PERSP' and test_camera.data.type == 'PERSP'):
+           error_messages.append('Only perspective cameras are supported!')
+
+        if (method == 'SOF' and sof_name == '') or (method == 'TTC' and ttc_name == '') or (method == 'COS' and cos_name == ''):
+            error_messages.append('Dataset name cannot be empty!')
+
+        if method == 'COS' and any(x == 0 for x in scene.sphere_scale):
+            error_messages.append('The BlenderNeRF Sphere cannot be flat! Change its scale to be non zero in all axes.')
 
         if not self.is_power_of_two(scene.aabb):
             error_messages.append('AABB scale needs to be a power of two!')

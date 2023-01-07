@@ -9,7 +9,6 @@ OUTPUT_TRAIN = 'images_train'
 TRAIN_CAM = 'Train Cam'
 TEST_CAM = 'Test Cam'
 
-
 # train and test cameras operator class
 class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
     '''Train and Test Cameras Operator'''
@@ -39,8 +38,7 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         output_dir = bpy.path.clean_name(scene.ttc_dataset_name)
         output_path = os.path.join(scene.save_path, output_dir)
 
-        # initial property values might have changed since depsgraph_update_post handler
-        scene.init_frame_step = scene.frame_step # not needed, but simplifies post_render handler function
+        # initial property might have changed since set_init_props update
         scene.init_output_path = scene.render.filepath
 
         if scene.test_data:
@@ -60,13 +58,14 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
             output_train_data['frames'] = self.get_camera_extrinsics(scene, train_camera, mode='TRAIN', method='TTC')
             self.save_json(output_train_path, 'transforms_train.json', output_train_data)
 
+            # rendering
             if scene.render_frames:
-                scene.is_rendering = (False, True, False)
+                scene.rendering = (False, True, False)
                 scene.render.filepath = os.path.join(output_train, '') # training frames path
                 bpy.ops.render.render('INVOKE_DEFAULT', animation=True, write_still=True) # render scene
 
         # if frames are rendered, the below code is executed by the handler function
-        if not any(scene.is_rendering):
+        if not any(scene.rendering):
             # compress dataset and remove folder (only keep zip)
             shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
             shutil.rmtree(output_path)

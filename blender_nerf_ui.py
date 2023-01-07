@@ -3,9 +3,9 @@ import bpy
 
 # blender nerf shared ui properties class
 class BlenderNeRF_UI(bpy.types.Panel):
-    '''Blender x NeRF UI'''
+    '''BlenderNeRF UI'''
     bl_idname = 'panel.blender_nerf_ui'
-    bl_label = 'Blender x NeRF shared UI'
+    bl_label = 'BlenderNeRF shared UI'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'BlenderNeRF'
@@ -15,7 +15,7 @@ class BlenderNeRF_UI(bpy.types.Panel):
         scene = context.scene
 
         layout.alignment = 'CENTER'
-        row = layout.row()
+        row = layout.row(align=True)
 
         row.prop(scene, 'train_data', toggle=True)
         row.prop(scene, 'test_data', toggle=True)

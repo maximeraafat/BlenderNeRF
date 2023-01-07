@@ -1,25 +1,18 @@
-import os
-import shutil
 import bpy
-from bpy.app.handlers import persistent
-from . import blender_nerf_ui, sof_ui, ttc_ui, sof_operator, ttc_operator
+from . import helper, blender_nerf_ui, sof_ui, ttc_ui, cos_ui, sof_operator, ttc_operator, cos_operator
 
 
+# blender info
 bl_info = {
-    'name': 'Blender x NeRF',
-    'description': 'Simple and quick NeRF dataset creation tool',
+    'name': 'BlenderNeRF',
+    'description': 'Easy NeRF synthetic dataset creation within Blender',
     'author': 'Maxime Raafat',
-    'version': (2, 0, 0),
+    'version': (3, 0, 0),
     'blender': (3, 0, 0),
     'location': '3D View > N panel > BlenderNeRF',
     'doc_url': 'https://github.com/maximeraafat/BlenderNeRF',
     'category': 'Object',
 }
-
-
-# camera pointer property poll function
-def poll_is_camera(self, obj):
-    return obj.type == 'CAMERA'
 
 # global addon script variables
 TRAIN_CAM = 'Train Cam'
@@ -27,26 +20,48 @@ TEST_CAM = 'Test Cam'
 
 # addon blender properties
 PROPS = [
-    # global manually defined properties
-    ('train_data', bpy.props.BoolProperty(name='Train', description='Construct training data', default=True) ),
-    ('test_data', bpy.props.BoolProperty(name='Test', description='Construct testing data', default=True) ),
-    ('aabb', bpy.props.IntProperty(name='AABB', description='AABB scale as defined in Instant NGPs NeRF version', default=4, soft_min=1, soft_max=128) ),
-    ('render_frames', bpy.props.BoolProperty(name='Render Frames', description='Whether the training frames for NeRF should be rendered or not, in which case only the transforms.json files will be generated', default=True) ),
-    ('save_path', bpy.props.StringProperty(name='Save Path', description='Path to the output directory in which the dataset will be stored', subtype='DIR_PATH') ),
+    # global controllable properties
+    ('train_data', bpy.props.BoolProperty(name='Train', description='Construct the training data', default=True) ),
+    ('test_data', bpy.props.BoolProperty(name='Test', description='Construct the testing data', default=True) ),
+    ('aabb', bpy.props.IntProperty(name='AABB', description='AABB scale as defined in Instant NGP', default=4, soft_min=1, soft_max=128) ),
+    ('render_frames', bpy.props.BoolProperty(name='Render Frames', description='Whether training frames should be rendered. If not selected, only the transforms.json files will be generated', default=True) ),
+    ('save_path', bpy.props.StringProperty(name='Save Path', description='Path to the output directory in which the synthetic dataset will be stored', subtype='DIR_PATH') ),
 
-    # global automatically defined properties
+    # global automatic properties
     ('init_frame_step', bpy.props.IntProperty(name='Initial Frame Step') ),
     ('init_output_path', bpy.props.StringProperty(name='Initial Output Path', subtype='DIR_PATH') ),
-    ('is_rendering', bpy.props.BoolVectorProperty(name='Method Rendering?', description='Whether SOF, TTC or COS is rendering', default=(False, False, False), size=3) ),
+    ('rendering', bpy.props.BoolVectorProperty(name='Rendering', description='Whether one of the SOF, TTC or COS methods is rendering', default=(False, False, False), size=3) ),
 
     # sof properties
     ('sof_dataset_name', bpy.props.StringProperty(name='Name', description='Name of the SOF dataset : the data will be stored under <save path>/<name>', default='dataset') ),
-    ('train_frame_steps', bpy.props.IntProperty(name='Frame Step', description='Number of frames to skip forward for the NeRF training dataset created while rendering/playing back each frame', default=3, soft_min=1) ),
+    ('train_frame_steps', bpy.props.IntProperty(name='Frame Step', description='Frame step N for the captured training frames. Every N-th frame will be used for training NeRF', default=3, soft_min=1) ),
 
     # ttc properties
     ('ttc_dataset_name', bpy.props.StringProperty(name='Name', description='Name of the TTC dataset : the data will be stored under <save path>/<name>', default='dataset') ),
-    ('camera_train_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TRAIN_CAM, description='Pointer to training camera', poll=poll_is_camera) ),
-    ('camera_test_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TEST_CAM, description='Pointer to testing camera', poll=poll_is_camera) ),
+    ('camera_train_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TRAIN_CAM, description='Pointer to the training camera', poll=helper.poll_is_camera) ),
+    ('camera_test_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TEST_CAM, description='Pointer to the testing camera', poll=helper.poll_is_camera) ),
+
+    # cos controllable properties
+    ('cos_dataset_name', bpy.props.StringProperty(name='Name', description='Name of the COS dataset : the data will be stored under <save path>/<name>', default='dataset') ),
+    ('sphere_location', bpy.props.FloatVectorProperty(name='Location', description='Center position of the training sphere', unit='LENGTH', update=helper.properties_ui_upd) ),
+    ('sphere_rotation', bpy.props.FloatVectorProperty(name='Rotation', description='Rotation of the training sphere', unit='ROTATION', update=helper.properties_ui_upd) ),
+    ('sphere_scale', bpy.props.FloatVectorProperty(name='Scale', description='Scale of the training sphere in xyz axes', default=(1.0, 1.0, 1.0), update=helper.properties_ui_upd) ),
+    ('sphere_radius', bpy.props.FloatProperty(name='Radius', description='Radius scale of the training sphere', default=4.0, soft_min=0.01, unit='LENGTH', update=helper.properties_ui_upd) ),
+    ('focal', bpy.props.FloatProperty(name='Lens', description='Focal length of the training camera', default=50, soft_min=1, soft_max=5000, unit='CAMERA', update=helper.properties_ui_upd) ),
+    ('seed', bpy.props.IntProperty(name='Seed', description='Random seed for sampling views on the training sphere', default=0) ),
+    ('nb_frames', bpy.props.IntProperty(name='Frames', description='Number of training frames randomly sampled from the training sphere', default=100, soft_min=1) ),
+    ('show_sphere', bpy.props.BoolProperty(name='Sphere', description='Whether to show the training sphere from which random views will be sampled', default=False, update=helper.visualize_sphere) ),
+    ('show_camera', bpy.props.BoolProperty(name='Camera', description='Whether to show the training camera', default=False, update=helper.visualize_camera) ),
+    ('upper_views', bpy.props.BoolProperty(name='Upper Views', description='Whether to sample views from the upper hemisphere of the training sphere only', default=False) ),
+
+    # cos automatic properties
+    ('sphere_exists', bpy.props.BoolProperty(name='Sphere Exists', description='Whether the sphere exists', default=False) ),
+    ('init_sphere_exists', bpy.props.BoolProperty(name='Init sphere exists', description='Whether the sphere initially exists', default=False) ),
+    ('camera_exists', bpy.props.BoolProperty(name='Camera Exists', description='Whether the camera exists', default=False) ),
+    ('init_camera_exists', bpy.props.BoolProperty(name='Init camera exists', description='Whether the camera initially exists', default=False) ),
+    ('init_active_camera', bpy.props.PointerProperty(type=bpy.types.Object, name='Init active camera', description='Pointer to initial active camera', poll=helper.poll_is_camera) ),
+    ('init_frame_start', bpy.props.IntProperty(name='Initial Frame Start') ),
+    ('init_frame_end', bpy.props.IntProperty(name='Initial Frame End') ),
 ]
 
 # classes to register / unregister
@@ -54,45 +69,11 @@ CLASSES = [
     blender_nerf_ui.BlenderNeRF_UI,
     sof_ui.SOF_UI,
     ttc_ui.TTC_UI,
+    cos_ui.COS_UI,
     sof_operator.SubsetOfFrames,
-    ttc_operator.TrainTestCameras
+    ttc_operator.TrainTestCameras,
+    cos_operator.CameraOnSphere
 ]
-
-
-## blender handler functions
-
-# set frame step and filepath back to initial
-@persistent
-def post_render(scene):
-    if any(scene.is_rendering): # execute this function only when rendering with addon
-        scene.is_rendering = (False, False, False)
-        scene.frame_step = scene.init_frame_step
-        scene.render.filepath = scene.init_output_path
-
-        method_dataset_name = scene.sof_dataset_name if scene.is_rendering[0] else scene.ttc_dataset_name
-
-        # clean directory name (unsupported characters replaced) and output path
-        output_dir = bpy.path.clean_name(method_dataset_name)
-        output_path = os.path.join(scene.save_path, output_dir)
-
-        # compress dataset and remove folder (only keep zip)
-        shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
-        shutil.rmtree(output_path)
-
-# set initial property values (bpy.data and bpy.context require a loaded scene)
-@persistent
-def set_init_props(scene):
-    scene.init_frame_step = scene.frame_step
-    scene.init_output_path = scene.render.filepath
-
-    # set save_path to path in which blender file is stored
-    # filepath = bpy.data.filepath
-    # filename = bpy.path.basename(filepath)
-    # default_save_path = filepath[:-len(filename)] # remove file name from blender file path = directoy path
-    # scene.save_path = default_save_path
-
-    bpy.app.handlers.depsgraph_update_post.remove(set_init_props)
-
 
 # load addon
 def register():
@@ -102,18 +83,22 @@ def register():
     for cls in CLASSES:
         bpy.utils.register_class(cls)
 
-    bpy.app.handlers.render_complete.append(post_render)
-    bpy.app.handlers.render_cancel.append(post_render)
-    bpy.app.handlers.depsgraph_update_post.append(set_init_props)
+    bpy.app.handlers.render_complete.append(helper.post_render)
+    bpy.app.handlers.render_cancel.append(helper.post_render)
+    bpy.app.handlers.frame_change_post.append(helper.cos_camera_update)
+    bpy.app.handlers.depsgraph_update_post.append(helper.properties_desgraph_upd)
+    bpy.app.handlers.depsgraph_update_post.append(helper.set_init_props)
 
 # deregister addon
 def unregister():
     for (prop_name, _) in PROPS:
         delattr(bpy.types.Scene, prop_name)
 
-    bpy.app.handlers.render_complete.remove(post_render)
-    bpy.app.handlers.render_cancel.remove(post_render)
-    # bpy.app.handlers.depsgraph_update_post.remove(set_init_props)
+    bpy.app.handlers.render_complete.remove(helper.post_render)
+    bpy.app.handlers.render_cancel.remove(helper.post_render)
+    bpy.app.handlers.frame_change_post.remove(helper.cos_camera_update)
+    bpy.app.handlers.depsgraph_update_post.remove(helper.properties_desgraph_upd)
+    # bpy.app.handlers.depsgraph_update_post.remove(helper.set_init_props)
 
     for cls in CLASSES:
         bpy.utils.unregister_class(cls)
