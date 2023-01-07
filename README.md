@@ -38,11 +38,11 @@ NeRFs can speed up this process, but require camera information typically extrac
 
 ## Setting
 
-**BlenderNeRF** consists of 3 methods discussed in the sub-sections below. Each method is capable of creating **training** data and **testing** data for NeRF in the form of training images and a `transforms_train.json` respectively `transforms_test.json` file with the corresponding camera information. The data is archived into a single **ZIP** file containing training and testing folders. Training data is used by the NeRF model to learn the 3D scene representation. Once trained, the model can be evaluated (or tested) on the testing data (only camera information) to obtain novel renders.
+**BlenderNeRF** consists of 3 methods discussed in the sub-sections below. Each method is capable of creating **training** data and **testing** data for NeRF in the form of training images and a `transforms_train.json` respectively `transforms_test.json` file with the corresponding camera information. The data is archived into a single **ZIP** file containing training and testing folders. Training data can then be used by a NeRF model to learn the 3D scene representation. Once trained, the model may be evaluated (or tested) on the testing data (camera information only) to obtain novel renders.
 
 ### Subset of Frames
 
-**Subset of Frames (SOF)** renders every **N** frames from a camera animation, and utilises the rendered subset of frames as NeRF training data. The registered testing data spans over all frames of the same camera amimation, including training frames. When trained, the NeRF model can render the full camera animation and is consequently particularly suited for rendering large animation of static scenes.
+**Subset of Frames (SOF)** renders every **N** frames from a camera animation, and utilises the rendered subset of frames as NeRF training data. The registered testing data spans over all frames of the same camera amimation, including training frames. When trained, the NeRF model can render the full camera animation and is consequently well suited for rendering large animation of static scenes.
 
 ### Train and Test Cameras
 
@@ -65,14 +65,14 @@ The add-on properties panel is available under `3D View > N panel > BlenderNeRF`
 
 `AABB` is restricted to be an integer power of 2, it defines the side length of the bounding box volume in which NeRF will trace rays. The property was introduced in **NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)** version of NeRF, currently the only supported version. Future releases of this add-on will introduce support for the original NeRF camera conventions.
 
-Notice that each method has its separate distinctive `Name` property (by default set to `dataset`) corresponding to the dataset name and created **ZIP** filename for the respective method. Please note that unsupported characters, such as spaces, `#` or `/`, will automatically be replaced by an underscore.
+Notice that each method has its distinctive `Name` property (by default set to `dataset`) corresponding to the dataset name and created **ZIP** filename for the respective method. Please note that unsupported characters, such as spaces, `#` or `/`, will automatically be replaced by an underscore.
 
 Below are described the properties specific to each method (the `Name` property is left out, since already discussed above).
 
 ### How to SOF
 
 * `Frame Step` (by default set to **3**) : **N** (as defined in the [Setting](#setting) section) = frequency at which the training frames are registered
-* `Camera` (always set to the activate camera) : camera used for registering training and testing data
+* `Camera` (always set to the active camera) : camera used for registering training and testing data
 * `PLAY SOF` : play the **Subset of Frames** method
 
 ### How to TTC
@@ -83,33 +83,33 @@ Below are described the properties specific to each method (the `Name` property 
 
 ### How to COS
 
-* `Camera` (always set to the activate camera) : camera used for registering the testing data
+* `Camera` (always set to the active camera) : camera used for registering the testing data
 * `Location` (by default set to **0m** vector) : center position of the training sphere from which camera views are sampled
 * `Rotation` (by default set to **0°** vector) : rotation of the training sphere from which camera views are sampled
 * `Scale` (by default set to **1** vector) : scale vector of the training sphere in xyz axes
 * `Radius` (by default set to **4m**) : radius scalar of the training sphere
 * `Lens` (by default set to **50mm**) : focal length of the training camera
 * `Seed` (by default set to **0**) : seed to initialize the random camera view sampling procedure
-* `Frames` (by default set to **100**) : number of training frames randomly sampled and rendered from the training sphere
+* `Frames` (by default set to **100**) : number of training frames sampled and rendered from the training sphere
 * `Sphere` (deactivated by default) : whether to show the training sphere from which random views will be sampled
 * `Camera` (deactivated by default) : whether to show the camera used for registering the training data
-* `Upper Views` (deactivated by default) : whether to sample views from the upper hemisphere of the training sphere only
+* `Upper Views` (deactivated by default) : whether to sample views from the upper training hemisphere only (rotation variant)
 * `PLAY COS` : play the **Camera on Sphere** method
 
-Note that activating the `Sphere` and `Camera` properties create a `BlenderNeRF Sphere` empty object and a `BlenderNeRF Camera` camera object respectively. Please do not create any objects with these names manually, since this might break the add-on functionalities.
+Note that activating the `Sphere` and `Camera` properties creates a `BlenderNeRF Sphere` empty object and a `BlenderNeRF Camera` camera object respectively. Please do not create any objects with these names manually, since this might break the add-on functionalities.
 
-Training frames will be captured using the `BlenderNeRF Camera` object. Keep in mind that the training camera is locked in place and cannot manually be moved. The COS method will construct the training data from frame 1 to `Frames`, irrespectively of the scene frame range. Finally, note that the `Upper Views` property is rotation variant.
+Training frames will be captured using the `BlenderNeRF Camera` object from frame 1 to `Frames`, irrespectively of the scene frame range. Finally, keep in mind that the training camera is locked in place and cannot manually be moved.
 
 
 ## Tips for optimal results
 
-As mentioned previously, the add-on currently only supports **NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)** version of NeRF. Feel free to visit their repository for further help. Below are some quick tips for optimal NeRFing.
+As mentioned previously, the add-on currently only supports **NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)** version of NeRF. Feel free to visit their repository for further help. Below are some quick tips for optimal **nerfing**.
 
 * NeRF trains best with 50 to 150 images
 * Testing views should not deviate too much from training views
 * Scene movement, motion blur or blurring artefacts can degrade the reconstruction quality
 * The captured scene should be at least one Blender unit away from the camera
-* The closer the camera to the captured scene, the lower you can set `AABB`
+* The closer the camera to the captured scene, the lower `AABB` can be set
 * Higher `AABB` will increase training time, keep it as low as possible
 * If the reconstruction quality appears blurry, start by adjusting `AABB` while keeping it a power of 2
 * Avoid adjusting the camera focal lengths during the animation, the vanilla NeRF methods do not support multiple focal lengths
@@ -133,7 +133,7 @@ If you made use of **BlenderNeRF** in your artistic projects, feel free to share
 
 ## Upcoming
 
-Below are presented ideas for upcoming features sorted by priority in descending order.
+Ideas for upcoming features are listed in the points below, sorted by priority in descending order.
 
 - [ ] Evaluations and demonstrations for each method on various scenes
 - [ ] Support for the original NeRF `transforms.json` convention
