@@ -108,7 +108,6 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         assert method == 'SOF' or method == 'TTC' or method == 'COS'
 
         camera = scene.camera
-        sphere_camera = scene.objects[CAMERA_NAME]
         train_camera = scene.camera_train_target
         test_camera = scene.camera_test_target
 
@@ -124,8 +123,10 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         if method == 'TTC' and not (train_camera.data.type == 'PERSP' and test_camera.data.type == 'PERSP'):
            error_messages.append('Only perspective cameras are supported!')
 
-        if method == 'COS' and CAMERA_NAME in scene.objects.keys() and not sphere_camera.data.type == 'PERSP':
-            error_messages.append('BlenderNeRF Camera must remain a perspective camera!')
+        if method == 'COS' and CAMERA_NAME in scene.objects.keys():
+            sphere_camera = scene.objects[CAMERA_NAME]
+            if not sphere_camera.data.type == 'PERSP':
+                error_messages.append('BlenderNeRF Camera must remain a perspective camera!')
 
         if (method == 'SOF' and sof_name == '') or (method == 'TTC' and ttc_name == '') or (method == 'COS' and cos_name == ''):
             error_messages.append('Dataset name cannot be empty!')
