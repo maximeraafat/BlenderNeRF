@@ -10,8 +10,8 @@ Whether a VFX artist, a research fellow or a graphics amateur, **BlenderNeRF** i
 I recommend watching [this YouTube video](https://www.youtube.com/watch?v=YX5AoaWrowY) by **Corridor Crew** for a thrilling investigation on a few use cases and future potential applications of NeRFs.
 
 <p align='center'>
-  <img src='https://maximeraafat.github.io/assets/posts/donut_3/Donut3_compressed.gif' width='400'/>
-  <img src='https://maximeraafat.github.io/assets/posts/donut_3/Donut3_NeRF_compressed.gif' width='400'>
+  <img src='https://maximeraafat.github.io/assets/posts/donut_3/Donut3_compressed.gif' width='45%'/>
+  <img src='https://maximeraafat.github.io/assets/posts/donut_3/Donut3_NeRF_compressed.gif' width='45%'>
   <br>
   <b>
     Left : traditional rendering with Eevee
