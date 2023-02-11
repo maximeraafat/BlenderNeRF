@@ -7,7 +7,7 @@ bl_info = {
     'name': 'BlenderNeRF',
     'description': 'Easy NeRF synthetic dataset creation within Blender',
     'author': 'Maxime Raafat',
-    'version': (3, 0, 0),
+    'version': (4, 0, 0),
     'blender': (3, 0, 0),
     'location': '3D View > N panel > BlenderNeRF',
     'doc_url': 'https://github.com/maximeraafat/BlenderNeRF',
