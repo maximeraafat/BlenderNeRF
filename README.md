@@ -61,9 +61,13 @@ The add-on properties panel is available under `3D View > N panel > BlenderNeRF`
 * `Test` (activated by default) : whether to register testing data (camera information only)
 * `AABB` (by default set to **4**) : aabb scale parameter as described in Instant NGP (more details below)
 * `Render Frames` (activated by default) : whether to render the frames
+* `Save Log File` (deactivated by default) : whether to save a log file containing reproducibility information on the **BlenderNeRF** run
+* `File Format` (**NGP** by default) : whether to export the camera files in the Instant NGP or defaut NeRF file format convention
 * `Save Path` (empty by default) : path to the output directory in which the dataset will be created
 
-`AABB` is restricted to be an integer power of 2, it defines the side length of the bounding box volume in which NeRF will trace rays. The property was introduced in **NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)** version of NeRF, currently the only supported version. Future releases of this add-on will introduce support for the original NeRF camera conventions.
+`AABB` is restricted to be an integer power of 2, it defines the side length of the bounding box volume in which NeRF will trace rays. The property was introduced with **NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)** version of NeRF.
+
+The `File Format` property can either be **NGP** or **NeRF**. The **NGP** file format convention is the same as the **NeRF** one, with a few additional parameters which can be accessed by Instant NGP.
 
 Notice that each method has its distinctive `Name` property (by default set to `dataset`) corresponding to the dataset name and created **ZIP** filename for the respective method. Please note that unsupported characters, such as spaces, `#` or `/`, will automatically be replaced by an underscore.
 
@@ -94,16 +98,18 @@ Below are described the properties specific to each method (the `Name` property 
 * `Sphere` (deactivated by default) : whether to show the training sphere from which random views will be sampled
 * `Camera` (deactivated by default) : whether to show the camera used for registering the training data
 * `Upper Views` (deactivated by default) : whether to sample views from the upper training hemisphere only (rotation variant)
+* `Outwards` (deactivated by default) : whether to point the camera outwards of the training sphere
 * `PLAY COS` : play the **Camera on Sphere** method
 
 Note that activating the `Sphere` and `Camera` properties creates a `BlenderNeRF Sphere` empty object and a `BlenderNeRF Camera` camera object respectively. Please do not create any objects with these names manually, since this might break the add-on functionalities.
 
-Training frames will be captured using the `BlenderNeRF Camera` object from frame 1 to `Frames`, irrespectively of the scene frame range. Finally, keep in mind that the training camera is locked in place and cannot manually be moved.
+
+`Frames` amount of training frames will be captured using the `BlenderNeRF Camera` object, starting from the scene start frame. Finally, keep in mind that the training camera is locked in place and cannot manually be moved.
 
 
 ## Tips for optimal results
 
-As mentioned previously, the add-on currently only supports **NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)** version of NeRF. Feel free to visit their repository for further help. Below are some quick tips for optimal **nerfing**.
+NVIDIA provides a few helpful tips on how to train a NeRF model using **[Instant NGP](https://github.com/NVlabs/instant-ngp/blob/master/docs/nerf_dataset_tips.md)**. Feel free to visit their repository for further help. Below are some quick tips for optimal **nerfing**.
 
 * NeRF trains best with 50 to 150 images
 * Testing views should not deviate too much from training views
@@ -117,7 +123,7 @@ As mentioned previously, the add-on currently only supports **NVIDIA's [Instant 
 
 ## How to run NeRF
 
-If you have access to an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp) on your own device for an optimal user experience with a GUI by following the instructions provided in their GitHub repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free (all you need is a Google account).
+If you have access to an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp#installation) on your own device for an optimal user experience, by following the instructions provided on their repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free with a Google account.
 
 Open this [COLAB notebook](https://colab.research.google.com/drive/1CtF_0FgwzCZMYQzGXbye2iVS1ZLlq9Tw?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0)) and follow the instructions.
 
@@ -125,7 +131,6 @@ Open this [COLAB notebook](https://colab.research.google.com/drive/1CtF_0FgwzCZM
 ## Remarks
 
 This add-on is being developed as a fun side project over the course of multiple months and versions of Blender, mainly on macOS. If you encouter any issues with the plug-in functionalities, feel free to open a GitHub issue with a clear description of the problem, which **BlenderNeRF** version the issues have been experienced with, and any further information if relevant.
- 
 
 If you find this repository useful in your research, please consider citing **BlenderNeRF** using the dedicated button above. \
 If you made use of **BlenderNeRF** in your artistic projects, feel free to share some of your work using the `#blendernerf` hashtag on social media! :)
@@ -136,9 +141,4 @@ If you made use of **BlenderNeRF** in your artistic projects, feel free to share
 Ideas for upcoming features are listed in the points below, sorted by priority in descending order.
 
 - [ ] Evaluations and demonstrations for each method on various scenes
-- [ ] Support for the original NeRF `transforms.json` convention
-- [ ] Support for previous blender versions
-- [ ] Enable option to create log file for reproducibility containing add-on version, used method and all respective parameters...
 - [ ] Enable user defined NeRF output resolution in COLAB notebook : if width or length = 0, use default scene resolution
-- [ ] Enable option to copy already rendered frames from a set of images instead of rendering them again
-- [ ] Add-on updater button (see [this video](https://www.youtube.com/watch?v=usjPdfMHE9c&t))?
