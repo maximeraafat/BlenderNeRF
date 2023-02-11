@@ -56,7 +56,7 @@ def visualize_camera(self, context):
         bpy.data.cameras[CAMERA_NAME].lens = scene.focal
 
         cam_constraint = camera.constraints.new(type='TRACK_TO')
-        cam_constraint.track_axis = 'TRACK_NEGATIVE_Z'
+        cam_constraint.track_axis = 'TRACK_Z' if scene.outwards else 'TRACK_NEGATIVE_Z'
         cam_constraint.up_axis = 'UP_Y'
         cam_constraint.target = bpy.data.objects[EMPTY_NAME]
 
@@ -105,7 +105,7 @@ def sample_from_sphere(scene):
 
     return point
 
-## two way property link between sphere and ui (property and hanlder functions)
+## two way property link between sphere and ui (property and handler functions)
 # https://blender.stackexchange.com/questions/261174/2-way-property-link-or-a-filtered-property-display
 
 def properties_ui_upd(self, context):
@@ -129,6 +129,7 @@ def properties_ui(self, context):
     if CAMERA_NAME in scene.objects.keys():
         upd_off()
         bpy.data.cameras[CAMERA_NAME].lens = scene.focal
+        bpy.context.scene.objects[CAMERA_NAME].constraints['Track To'].track_axis = 'TRACK_Z' if scene.outwards else 'TRACK_NEGATIVE_Z'
         upd_on()
 
 # if empty sphere modified outside of ui panel, edit panel properties
@@ -144,6 +145,7 @@ def properties_desgraph(scene):
     if scene.show_camera and CAMERA_NAME in scene.objects.keys():
         upd_off()
         scene.focal = bpy.data.cameras[CAMERA_NAME].lens
+        scene.outwards = (bpy.context.scene.objects[CAMERA_NAME].constraints['Track To'].track_axis == 'TRACK_Z')
         upd_on()
 
     if EMPTY_NAME not in scene.objects.keys() and scene.sphere_exists:
@@ -181,16 +183,16 @@ def upd_on():
 
 ## blender handler functions
 
-# set frame step and filepath back to initial
+# reset properties back to intial
 @persistent
 def post_render(scene):
     if any(scene.rendering): # execute this function only when rendering with addon
         dataset_names = (scene.sof_dataset_name, scene.ttc_dataset_name, scene.cos_dataset_name)
         method_dataset_name = dataset_names[ list(scene.rendering).index(True) ]
 
-        if scene.rendering[0]: scene.frame_step = scene.init_frame_step # sof
+        if scene.rendering[0]: scene.frame_step = scene.init_frame_step # sof : reset frame step
 
-        if scene.rendering[2]: # cos
+        if scene.rendering[2]: # cos : reset camera settings
             if not scene.init_camera_exists: delete_camera(scene, CAMERA_NAME)
             if not scene.init_sphere_exists:
                 objects = bpy.data.objects
@@ -199,11 +201,10 @@ def post_render(scene):
                 scene.sphere_exists = False
 
             scene.camera = scene.init_active_camera
-            scene.frame_start = scene.init_frame_start
             scene.frame_end = scene.init_frame_end
 
         scene.rendering = (False, False, False)
-        scene.render.filepath = scene.init_output_path
+        scene.render.filepath = scene.init_output_path # reset filepath
 
         # clean directory name (unsupported characters replaced) and output path
         output_dir = bpy.path.clean_name(method_dataset_name)

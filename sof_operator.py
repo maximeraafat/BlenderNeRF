@@ -4,9 +4,6 @@ import bpy
 from . import blender_nerf_operator
 
 
-# global addon script variables
-OUTPUT_TRAIN = 'images_train'
-
 # subset of frames operator class
 class SubsetOfFrames(blender_nerf_operator.BlenderNeRF_Operator):
     '''Subset of Frames Operator'''
@@ -33,30 +30,28 @@ class SubsetOfFrames(blender_nerf_operator.BlenderNeRF_Operator):
         # clean directory name (unsupported characters replaced) and output path
         output_dir = bpy.path.clean_name(scene.sof_dataset_name)
         output_path = os.path.join(scene.save_path, output_dir)
+        os.makedirs(output_path, exist_ok=True)
+
+        if scene.logs: self.save_log_file(scene, output_path, method='SOF')
 
         # initial properties might have changed since set_init_props update
         scene.init_frame_step = scene.frame_step
         scene.init_output_path = scene.render.filepath
 
         if scene.test_data:
-            output_test_path = os.path.join(output_path, '%s_test' % output_dir)
-            os.makedirs(output_test_path, exist_ok=True)
-
             # testing transforms
             output_data['frames'] = self.get_camera_extrinsics(scene, camera, mode='TEST', method='SOF')
-            self.save_json(output_test_path, 'transforms_test.json', output_data)
+            self.save_json(output_path, 'transforms_test.json', output_data)
 
         if scene.train_data:
-            output_train_path = os.path.join(output_path, '%s_train' % output_dir)
-            output_train = os.path.join(output_train_path, OUTPUT_TRAIN)
-            os.makedirs(output_train, exist_ok=True)
-
             # training transforms
             output_data['frames'] = self.get_camera_extrinsics(scene, camera, mode='TRAIN', method='SOF')
-            self.save_json(output_train_path, 'transforms_train.json', output_data)
+            self.save_json(output_path, 'transforms_train.json', output_data)
 
             # rendering
             if scene.render_frames:
+                output_train = os.path.join(output_path, 'train')
+                os.makedirs(output_train, exist_ok=True)
                 scene.rendering = (True, False, False)
                 scene.frame_step = scene.train_frame_steps # update frame step
                 scene.render.filepath = os.path.join(output_train, '') # training frames path

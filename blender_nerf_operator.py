@@ -1,12 +1,13 @@
 import os
 import math
 import json
+import datetime
 import bpy
 
 
 # global addon script variables
-OUTPUT_TRAIN = 'images_train'
-OUTPUT_TEST = 'images_test'
+OUTPUT_TRAIN = 'train'
+OUTPUT_TEST = 'test'
 CAMERA_NAME = 'BlenderNeRF Camera'
 
 
@@ -59,7 +60,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             'aabb_scale': scene.aabb
         }
 
-        return camera_intr_dict
+        return {'camera_angle_x': camera_angle_x} if scene.nerf else camera_intr_dict
 
     # camera extrinsics (transform matrices)
     def get_camera_extrinsics(self, scene, camera, mode='TRAIN', method='SOF'):
@@ -68,11 +69,10 @@ class BlenderNeRF_Operator(bpy.types.Operator):
 
         initFrame = scene.frame_current
         step = scene.train_frame_steps if (mode == 'TRAIN' and method == 'SOF') else scene.frame_step
-        start = 1 if (mode == 'TRAIN' and method == 'COS') else scene.frame_start
-        end = scene.nb_frames if (mode == 'TRAIN' and method == 'COS') else scene.frame_end
+        end = scene.frame_start + scene.nb_frames - 1 if (mode == 'TRAIN' and method == 'COS') else scene.frame_end
 
         camera_extr_dict = []
-        for frame in range(start, end + 1, step):
+        for frame in range(scene.frame_start, end + 1, step):
             scene.frame_set(frame)
             filename = os.path.basename( scene.render.frame_path(frame=frame) )
             filedir = OUTPUT_TRAIN * (mode == 'TRAIN') + OUTPUT_TEST * (mode == 'TEST')
@@ -141,3 +141,44 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             error_messages.append('Save path cannot be empty!')
 
         return error_messages
+
+    def save_log_file(self, scene, directory, method='SOF'):
+        assert method == 'SOF' or method == 'TTC' or method == 'COS'
+        now = datetime.datetime.now()
+
+        logdata = {
+            'BlenderNeRF Version': scene.blendernerf_version,
+            'Date and Time' : now.strftime("%d/%m/%Y %H:%M:%S"),
+            'Train': scene.train_data,
+            'Test': scene.test_data,
+            'AABB': scene.aabb,
+            'Render Frames': scene.render_frames,
+            'File Format': 'NeRF' if scene.nerf else 'NGP',
+            'Save Path': scene.save_path,
+            'Method': method
+        }
+
+        if method == 'SOF':
+            logdata['Frame Step'] = scene.train_frame_steps
+            logdata['Camera'] = scene.camera.name
+            logdata['Dataset Name'] = scene.sof_dataset_name
+
+        elif method == 'TTC':
+            logdata['Train Camera Name'] = scene.camera_train_target.name
+            logdata['Test Camera Name'] = scene.camera_test_target.name
+            logdata['Dataset Name'] = scene.ttc_dataset_name
+
+        else:
+            logdata['Camera'] = scene.camera.name
+            logdata['Location'] = str(list(scene.sphere_location))
+            logdata['Rotation'] = str(list(scene.sphere_rotation))
+            logdata['Scale'] = str(list(scene.sphere_scale))
+            logdata['Radius'] = scene.sphere_radius
+            logdata['Lens'] = str(scene.focal) + ' mm'
+            logdata['Seed'] = scene.seed
+            logdata['Frames'] = scene.nb_frames
+            logdata['Upper Views'] = scene.upper_views
+            logdata['Outwards'] = scene.outwards
+            logdata['Dataset Name'] = scene.cos_dataset_name
+
+        self.save_json(directory, filename='log.txt', data=logdata)

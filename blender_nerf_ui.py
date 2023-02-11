@@ -15,8 +15,8 @@ class BlenderNeRF_UI(bpy.types.Panel):
         scene = context.scene
 
         layout.alignment = 'CENTER'
-        row = layout.row(align=True)
 
+        row = layout.row(align=True)
         row.prop(scene, 'train_data', toggle=True)
         row.prop(scene, 'test_data', toggle=True)
 
@@ -29,6 +29,14 @@ class BlenderNeRF_UI(bpy.types.Panel):
             if scene.train_data:
                 layout.separator()
                 layout.prop(scene, 'render_frames')
+
+            layout.prop(scene, 'logs')
+            layout.separator()
+            layout.label(text='File Format')
+
+            row = layout.row(align=True)
+            row.prop(scene, 'nerf', toggle=True, text='NGP', invert_checkbox=True)
+            row.prop(scene, 'nerf', toggle=True)
 
             layout.separator()
             layout.use_property_split = True

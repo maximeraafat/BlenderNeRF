@@ -27,6 +27,8 @@ class COS_UI(bpy.types.Panel):
         layout.prop(scene, 'seed')
 
         layout.prop(scene, 'nb_frames')
+        layout.prop(scene, 'upper_views', toggle=True)
+        layout.prop(scene, 'outwards', toggle=True)
 
         layout.use_property_split = False
         layout.separator()
@@ -35,9 +37,6 @@ class COS_UI(bpy.types.Panel):
         row = layout.row(align=True)
         row.prop(scene, 'show_sphere', toggle=True)
         row.prop(scene, 'show_camera', toggle=True)
-
-        layout.separator()
-        layout.prop(scene, 'upper_views')
 
         layout.separator()
         layout.use_property_split = True

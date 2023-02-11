@@ -4,11 +4,6 @@ import bpy
 from . import blender_nerf_operator
 
 
-# global addon script variables
-OUTPUT_TRAIN = 'images_train'
-TRAIN_CAM = 'Train Cam'
-TEST_CAM = 'Test Cam'
-
 # train and test cameras operator class
 class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
     '''Train and Test Cameras Operator'''
@@ -37,29 +32,27 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         # clean directory name (unsupported characters replaced) and output path
         output_dir = bpy.path.clean_name(scene.ttc_dataset_name)
         output_path = os.path.join(scene.save_path, output_dir)
+        os.makedirs(output_path, exist_ok=True)
+
+        if scene.logs: self.save_log_file(scene, output_path, method='TTC')
 
         # initial property might have changed since set_init_props update
         scene.init_output_path = scene.render.filepath
 
         if scene.test_data:
-            output_test_path = os.path.join(output_path, '%s_test' % output_dir)
-            os.makedirs(output_test_path, exist_ok=True)
-
             # testing transforms
             output_test_data['frames'] = self.get_camera_extrinsics(scene, test_camera, mode='TEST', method='TTC')
-            self.save_json(output_test_path, 'transforms_test.json', output_test_data)
+            self.save_json(output_path, 'transforms_test.json', output_test_data)
 
         if scene.train_data:
-            output_train_path = os.path.join(output_path, '%s_train' % output_dir)
-            output_train = os.path.join(output_train_path, OUTPUT_TRAIN)
-            os.makedirs(output_train, exist_ok=True)
-
             # training transforms
             output_train_data['frames'] = self.get_camera_extrinsics(scene, train_camera, mode='TRAIN', method='TTC')
-            self.save_json(output_train_path, 'transforms_train.json', output_train_data)
+            self.save_json(output_path, 'transforms_train.json', output_train_data)
 
             # rendering
             if scene.render_frames:
+                output_train = os.path.join(output_path, 'train')
+                os.makedirs(output_train, exist_ok=True)
                 scene.rendering = (False, True, False)
                 scene.render.filepath = os.path.join(output_train, '') # training frames path
                 bpy.ops.render.render('INVOKE_DEFAULT', animation=True, write_still=True) # render scene
