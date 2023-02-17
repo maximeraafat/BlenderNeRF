@@ -132,7 +132,9 @@ Open this [COLAB notebook](https://colab.research.google.com/drive/1CtF_0FgwzCZM
 
 This add-on is being developed as a fun side project over the course of multiple months and versions of Blender, mainly on macOS. If you encouter any issues with the plug-in functionalities, feel free to open a GitHub issue with a clear description of the problem, which **BlenderNeRF** version the issues have been experienced with, and any further information if relevant.
 
-If you find this repository useful in your research, please consider citing **BlenderNeRF** using the dedicated button above. \
+## Citation
+
+If you find this repository useful in your research, please consider citing **BlenderNeRF** using the dedicated GitHub button above. \
 If you made use of **BlenderNeRF** in your artistic projects, feel free to share some of your work using the `#blendernerf` hashtag on social media! :)
 
 
