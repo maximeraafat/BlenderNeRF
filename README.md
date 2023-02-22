@@ -35,6 +35,8 @@ NeRFs can speed up this process, but require camera information typically extrac
 3. In Blender, head to **Edit > Preferences > Add-ons**, and click **Install...**
 4. Select the downloaded **ZIP** file, and activate the add-on (**Object: BlenderNeRF**)
 
+Although release versions of **BlenderNeRF** are available for download, they are primarily intended for tracking major code changes and for citation purposes. I recommend dowloading the current repository directly, since minor changes or bug fixes might not be included in a release right away.
+
 
 ## Setting
 
@@ -109,14 +111,13 @@ Note that activating the `Sphere` and `Camera` properties creates a `BlenderNeRF
 
 ## Tips for optimal results
 
-NVIDIA provides a few helpful tips on how to train a NeRF model using **[Instant NGP](https://github.com/NVlabs/instant-ngp/blob/master/docs/nerf_dataset_tips.md)**. Feel free to visit their repository for further help. Below are some quick tips for optimal **nerfing**.
+NVIDIA provides a few helpful tips on how to train a NeRF model using [Instant NGP](https://github.com/NVlabs/instant-ngp/blob/master/docs/nerf_dataset_tips.md). Feel free to visit their repository for further help. Below are some quick tips for optimal **nerfing**.
 
 * NeRF trains best with 50 to 150 images
 * Testing views should not deviate too much from training views
 * Scene movement, motion blur or blurring artefacts can degrade the reconstruction quality
 * The captured scene should be at least one Blender unit away from the camera
-* The closer the camera to the captured scene, the lower `AABB` can be set
-* Higher `AABB` will increase training time, keep it as low as possible
+* Keep `AABB` as tight as possible to the scene scale, higher values will slow down training
 * If the reconstruction quality appears blurry, start by adjusting `AABB` while keeping it a power of 2
 * Avoid adjusting the camera focal lengths during the animation, the vanilla NeRF methods do not support multiple focal lengths
 
@@ -134,9 +135,7 @@ This add-on is being developed as a fun side project over the course of multiple
 
 ## Citation
 
-If you find this repository useful in your research, please consider citing **BlenderNeRF** using the dedicated GitHub button above. \
-If you made use of **BlenderNeRF** in your artistic projects, feel free to share some of your work using the `#blendernerf` hashtag on social media! :)
-
+If you find this repository useful in your research, please consider citing **BlenderNeRF** using the dedicated GitHub button above. If you made use of this extension for your artistic projects, feel free to share some of your work using the `#blendernerf` hashtag on social media! :)
 
 ## Upcoming
 
