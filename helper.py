@@ -211,8 +211,8 @@ def post_render(scene):
         output_path = os.path.join(scene.save_path, output_dir)
 
         # compress dataset and remove folder (only keep zip)
-        shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
-        shutil.rmtree(output_path)
+        # shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
+        # shutil.rmtree(output_path)
 
 # set initial property values (bpy.data and bpy.context require a loaded scene)
 @persistent

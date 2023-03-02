@@ -44,3 +44,5 @@ class COS_UI(bpy.types.Panel):
 
         layout.separator()
         layout.operator('object.camera_on_sphere', text='PLAY COS')
+        layout.operator('object.camera_on_sphere_test', text='PLAY COS TEST')
+        layout.operator('object.camera_on_sphere_zip', text='ZIP')

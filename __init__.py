@@ -6,7 +6,7 @@ from . import helper, blender_nerf_ui, sof_ui, ttc_ui, cos_ui, sof_operator, ttc
 bl_info = {
     'name': 'BlenderNeRF',
     'description': 'Easy NeRF synthetic dataset creation within Blender',
-    'author': 'Maxime Raafat',
+    'author': 'Maxime Raafat, Jialin Zhu',
     'version': (4, 0, 1),
     'blender': (3, 0, 0),
     'location': '3D View > N panel > BlenderNeRF',
@@ -76,7 +76,9 @@ CLASSES = [
     cos_ui.COS_UI,
     sof_operator.SubsetOfFrames,
     ttc_operator.TrainTestCameras,
-    cos_operator.CameraOnSphere
+    cos_operator.CameraOnSphere,
+    cos_operator.CameraOnSphereTest,
+    cos_operator.CameraOnSphereZip
 ]
 
 # load addon
