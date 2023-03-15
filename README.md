@@ -25,7 +25,7 @@ I recommend watching [this YouTube video](https://www.youtube.com/watch?v=YX5Aoa
 
 Rendering is an expensive computation. Photorealistic scenes can take seconds to hours to render depending on the scene complexity, hardware and available software resources.
 
-NeRFs can speed up this process, but require camera information typically extracted via cumbersome code. This add-on enables anyone to get renders and cameras with a single click in Blender.
+NeRFs can speed up this process, but require camera information typically extracted via cumbersome code. This plugin enables anyone to get renders and cameras with a single click in Blender.
 
 
 ## Installation
@@ -105,7 +105,6 @@ Below are described the properties specific to each method (the `Name` property 
 
 Note that activating the `Sphere` and `Camera` properties creates a `BlenderNeRF Sphere` empty object and a `BlenderNeRF Camera` camera object respectively. Please do not create any objects with these names manually, since this might break the add-on functionalities.
 
-
 `Frames` amount of training frames will be captured using the `BlenderNeRF Camera` object, starting from the scene start frame. Finally, keep in mind that the training camera is locked in place and cannot manually be moved.
 
 
@@ -132,6 +131,11 @@ Open this [COLAB notebook](https://colab.research.google.com/drive/1CtF_0FgwzCZM
 ## Remarks
 
 This add-on is being developed as a fun side project over the course of multiple months and versions of Blender, mainly on macOS. If you encouter any issues with the plug-in functionalities, feel free to open a GitHub issue with a clear description of the problem, which **BlenderNeRF** version the issues have been experienced with, and any further information if relevant.
+
+### Real World Data
+
+While this extension is intended for synthetic datasets creation, existing tools for importing motion tracking data from real world cameras are available. One such example is **[Tracky](https://github.com/Shopify/tracky)** by **Shopify**, an open source iOS app and an adjacent Blender plugin recording motion tracking data from an ARKit session on iPhone. Keep in mind however that tracking data can be subject to drifts and inaccuracies, which might affect the resulting NeRF reconstruction quality.
+
 
 ## Citation
 
