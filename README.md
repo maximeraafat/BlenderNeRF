@@ -125,7 +125,7 @@ NVIDIA provides a few helpful tips on how to train a NeRF model using [Instant N
 
 If you have access to an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp#installation) on your own device for an optimal user experience, by following the instructions provided on their repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free with a Google account.
 
-Open this [COLAB notebook](https://colab.research.google.com/drive/1CtF_0FgwzCZMYQzGXbye2iVS1ZLlq9Tw?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0)) and follow the instructions.
+Open this [COLAB notebook](https://colab.research.google.com/drive/1dQInHx0Eg5LZUpnhEfoHDP77bCMwAPab?usp=sharing) (also downloadable [here](https://gist.github.com/maximeraafat/122a63c81affd6d574c67d187b82b0b0)) and follow the instructions.
 
 
 ## Remarks
@@ -140,10 +140,3 @@ While this extension is intended for synthetic datasets creation, existing tools
 ## Citation
 
 If you find this repository useful in your research, please consider citing **BlenderNeRF** using the dedicated GitHub button above. If you made use of this extension for your artistic projects, feel free to share some of your work using the `#blendernerf` hashtag on social media! :)
-
-## Upcoming
-
-Ideas for upcoming features are listed in the points below, sorted by priority in descending order.
-
-- [ ] Evaluations and demonstrations for each method on various scenes
-- [ ] Enable user defined NeRF output resolution in COLAB notebook : if width or length = 0, use default scene resolution
