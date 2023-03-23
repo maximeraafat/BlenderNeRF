@@ -15,7 +15,7 @@ Although release versions of **BlenderNeRF** are available for download, they ar
 
 ## Setting
 
-**BlenderNeRF** consists of 3 methods discussed in the sub-sections below. Each method is capable of creating **training** data and **testing** data for NeRF in the form of images and a `transforms.json` file. For training, images are stored in an `images` directory whereas test images are stored in `test_images` directory. Similarly, for training, we have a `transforms.json` file whereas for testing we have a `testing_transforms.json` file with the corresponding camera information. The data is archived into a single **ZIP** file containing training and testing folders. Training data can then be used by a NeRF model to learn the 3D scene representation. Once trained, the model may be evaluated (or tested) on the testing data (camera information only) to obtain novel renders.
+**BlenderNeRF** consists of 3 methods discussed in the sub-sections below. Each method is capable of creating **training** data and **testing** data for NeRF in the form of images and a `transforms.json` file. For training, images are stored in an `images` directory whereas test images are stored in `test_images` directory. Similarly, for training, we have a `transforms.json` file whereas for testing we have a `transforms_test.json` file with the corresponding camera information. The data is archived into a single **ZIP** file containing training and testing folders. Training data can then be used by a NeRF model to learn the 3D scene representation. Once trained, the model may be evaluated (or tested) on the testing data (camera information only) to obtain novel renders.
 
 ### Subset of Frames
 

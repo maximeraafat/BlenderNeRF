@@ -6,8 +6,8 @@ import bpy
 
 
 # global addon script variables
-OUTPUT_TRAIN = 'train'
-OUTPUT_TEST = 'test'
+OUTPUT_TRAIN = 'images'
+OUTPUT_TEST = 'test_images'
 CAMERA_NAME = 'BlenderNeRF Camera'
 
 
@@ -170,7 +170,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             'Test': scene.test_data,
             'AABB': scene.aabb,
             'Render Frames': scene.render_frames,
-            'File Format': 'NeRF' if scene.nerf else 'NGP',
+            'File Format': 'nerfstudio' if scene.nerf else 'NGP',
             'Save Path': scene.save_path,
             'Method': method
         }

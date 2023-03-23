@@ -67,7 +67,8 @@ class CameraOnSphere(blender_nerf_operator.BlenderNeRF_Operator):
 
             # rendering
             if scene.render_frames:
-                output_train = os.path.join(output_path, 'train')
+                # Modify rendering such that the output folder of train is images
+                output_train = os.path.join(output_path, 'images')
                 os.makedirs(output_train, exist_ok=True)
                 scene.rendering = (False, False, True)
                 scene.frame_end = scene.frame_start + scene.nb_frames - 1 # update end frame
