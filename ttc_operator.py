@@ -47,11 +47,13 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         if scene.train_data:
             # training transforms
             output_train_data['frames'] = self.get_camera_extrinsics(scene, train_camera, mode='TRAIN', method='TTC')
-            self.save_json(output_path, 'transforms_train.json', output_train_data)
+            # changed to transforms to eliminate problems with nerfstudio
+            self.save_json(output_path, 'transforms.json', output_train_data)
 
             # rendering
             if scene.render_frames:
-                output_train = os.path.join(output_path, 'train')
+                # updated path to be images for training data
+                output_train = os.path.join(output_path, 'images')
                 os.makedirs(output_train, exist_ok=True)
                 scene.rendering = (False, True, False)
                 scene.render.filepath = os.path.join(output_train, '') # training frames path

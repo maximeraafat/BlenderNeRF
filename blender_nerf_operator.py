@@ -43,14 +43,21 @@ class BlenderNeRF_Operator(bpy.types.Operator):
 
         s_u = 1 / pixel_size_mm_per_px
         s_v = 1 / pixel_size_mm_per_px / pixel_aspect_ratio
+        
+        # Added camera model for future access
+        camera_model = camera.data.type
 
+        # Added camera_model, k3, k4
         camera_intr_dict = {
+            'camera_model': "OPENCV",
             'camera_angle_x': camera_angle_x,
             'camera_angle_y': camera_angle_y,
             'fl_x': s_u,
             'fl_y': s_v,
             'k1': 0.0,
             'k2': 0.0,
+            'k3': 0.0,
+            'k4': 0.0,
             'p1': 0.0,
             'p2': 0.0,
             'cx': optical_center_x,
@@ -60,7 +67,17 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             'aabb_scale': scene.aabb
         }
 
-        return {'camera_angle_x': camera_angle_x} if scene.nerf else camera_intr_dict
+        # Updated this to return correct intrinsics depending on the output requested
+        if scene.nerf:
+            # nerfstudio selected 
+            ns_keys = ["camera_model", "fl_x", "fl_y", "cx", "cy", "w", "h", "k1", "k2", "k3", "k4", "p1", "p2"]
+            cam_intr_dict = {}
+            for key in ns_keys:
+                cam_intr_dict[key] = camera_intr_dict[key]
+            return cam_intr_dict
+
+        # instant-ngp selected
+        return camera_intr_dict
 
     # camera extrinsics (transform matrices)
     def get_camera_extrinsics(self, scene, camera, mode='TRAIN', method='SOF'):

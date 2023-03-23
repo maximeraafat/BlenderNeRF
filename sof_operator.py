@@ -46,11 +46,13 @@ class SubsetOfFrames(blender_nerf_operator.BlenderNeRF_Operator):
         if scene.train_data:
             # training transforms
             output_data['frames'] = self.get_camera_extrinsics(scene, camera, mode='TRAIN', method='SOF')
-            self.save_json(output_path, 'transforms_train.json', output_data)
+            # Changed to transforms to eliminate problems with nerfstudio
+            self.save_json(output_path, 'transforms.json', output_data)
 
             # rendering
             if scene.render_frames:
-                output_train = os.path.join(output_path, 'train')
+                # updated path to be images for training images
+                output_train = os.path.join(output_path, 'images')
                 os.makedirs(output_train, exist_ok=True)
                 scene.rendering = (True, False, False)
                 scene.frame_step = scene.train_frame_steps # update frame step

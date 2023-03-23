@@ -34,7 +34,9 @@ class BlenderNeRF_UI(bpy.types.Panel):
             layout.separator()
             layout.label(text='File Format')
 
+            # Figure out what this does
             row = layout.row(align=True)
+            # NGP is default, else, nerfstudio is used
             row.prop(scene, 'nerf', toggle=True, text='NGP', invert_checkbox=True)
             row.prop(scene, 'nerf', toggle=True)
 

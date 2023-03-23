@@ -62,7 +62,8 @@ class CameraOnSphere(blender_nerf_operator.BlenderNeRF_Operator):
 
             # training transforms
             sphere_output_data['frames'] = self.get_camera_extrinsics(scene, sphere_camera, mode='TRAIN', method='COS')
-            self.save_json(output_path, 'transforms_train.json', sphere_output_data)
+            # changed to transforms to eliminate problems with nerfstudio
+            self.save_json(output_path, 'transforms.json', sphere_output_data)
 
             # rendering
             if scene.render_frames:
