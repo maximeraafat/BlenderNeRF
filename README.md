@@ -79,13 +79,13 @@ Below are described the properties specific to each method (the `Name` property 
 
 * `Frame Step` (by default set to **3**) : **N** (as defined in the [Setting](#setting) section) = frequency at which the training frames are registered
 * `Camera` (always set to the active camera) : camera used for registering training and testing data
-* `PLAY SOF` : play the **Subset of Frames** method
+* `EXPORT SOF` : export using the **Subset of Frames** method
 
 ### How to TTC
 
 * `Train Cam` (empty by default) : camera used for registering the training data
 * `Test Cam` (empty by default) : camera used for registering the testing data
-* `PLAY TTC` : play the **Train and Test Cameras** method
+* `EXPORT TTC` : export using the **Train and Test Cameras** method
 
 ### How to COS
 
@@ -101,7 +101,7 @@ Below are described the properties specific to each method (the `Name` property 
 * `Camera` (deactivated by default) : whether to show the camera used for registering the training data
 * `Upper Views` (deactivated by default) : whether to sample views from the upper training hemisphere only (rotation variant)
 * `Outwards` (deactivated by default) : whether to point the camera outwards of the training sphere
-* `PLAY COS` : play the **Camera on Sphere** method
+* `EXPORT COS` : export using the **Camera on Sphere** method
 
 Note that activating the `Sphere` and `Camera` properties creates a `BlenderNeRF Sphere` empty object and a `BlenderNeRF Camera` camera object respectively. Please do not create any objects with these names manually, since this might break the add-on functionalities.
 
