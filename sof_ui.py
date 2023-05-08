@@ -4,7 +4,7 @@ import bpy
 # subset of frames ui class
 class SOF_UI(bpy.types.Panel):
     '''Subset of Frames UI'''
-    bl_idname = 'panel.sof_ui'
+    bl_idname = 'SCENE_PT_sof_ui'
     bl_label = 'Subset of Frames SOF'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -26,4 +26,4 @@ class SOF_UI(bpy.types.Panel):
         layout.prop(scene, 'sof_dataset_name')
 
         layout.separator()
-        layout.operator('object.subset_of_frames', text='PLAY SOF')
+        layout.operator('object.subset_of_frames', text='EXPORT SOF')

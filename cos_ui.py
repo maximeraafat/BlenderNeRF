@@ -4,7 +4,7 @@ import bpy
 # camera on sphere ui class
 class COS_UI(bpy.types.Panel):
     '''Camera on Sphere UI'''
-    bl_idname = 'panel.cos_ui'
+    bl_idname = 'SCENE_PT_cos_ui'
     bl_label = 'Camera on Sphere COS'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -43,4 +43,4 @@ class COS_UI(bpy.types.Panel):
         layout.prop(scene, 'cos_dataset_name')
 
         layout.separator()
-        layout.operator('object.camera_on_sphere', text='PLAY COS')
+        layout.operator('object.camera_on_sphere', text='EXPORT COS')

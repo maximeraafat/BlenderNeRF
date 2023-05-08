@@ -38,12 +38,12 @@ class SubsetOfFrames(blender_nerf_operator.BlenderNeRF_Operator):
         scene.init_frame_step = scene.frame_step
         scene.init_output_path = scene.render.filepath
 
-        if scene.test_data:
+        if scene.train_test_data == "test_data":
             # testing transforms
             output_data['frames'] = self.get_camera_extrinsics(scene, camera, mode='TEST', method='SOF')
             self.save_json(output_path, 'transforms_test.json', output_data)
 
-        if scene.train_data:
+        if scene.train_test_data == "train_data":
             # training transforms
             output_data['frames'] = self.get_camera_extrinsics(scene, camera, mode='TRAIN', method='SOF')
             self.save_json(output_path, 'transforms_train.json', output_data)

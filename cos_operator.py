@@ -47,12 +47,12 @@ class CameraOnSphere(blender_nerf_operator.BlenderNeRF_Operator):
         scene.init_frame_end = scene.frame_end
         scene.init_active_camera = camera
 
-        if scene.test_data:
+        if scene.train_test_data == "test_data":
             # testing transforms
             output_data['frames'] = self.get_camera_extrinsics(scene, camera, mode='TEST', method='COS')
             self.save_json(output_path, 'transforms_test.json', output_data)
 
-        if scene.train_data:
+        if scene.train_test_data == "train_data":
             if not scene.show_camera: scene.show_camera = True
 
             # train camera on sphere

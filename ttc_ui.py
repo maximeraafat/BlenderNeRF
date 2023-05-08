@@ -4,7 +4,7 @@ import bpy
 # train and test cameras ui class
 class TTC_UI(bpy.types.Panel):
     '''Train and Test Cameras UI'''
-    bl_idname = 'panel.ttc_ui'
+    bl_idname = 'SCENE_PT_ttc_ui'
     bl_label = 'Train and Test Cameras TTC'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -25,4 +25,4 @@ class TTC_UI(bpy.types.Panel):
         layout.prop(scene, 'ttc_dataset_name')
 
         layout.separator()
-        layout.operator('object.train_test_cameras', text='PLAY TTC')
+        layout.operator('object.train_test_cameras', text='EXPORT TTC')

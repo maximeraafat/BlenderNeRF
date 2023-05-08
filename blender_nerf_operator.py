@@ -149,8 +149,8 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         logdata = {
             'BlenderNeRF Version': scene.blendernerf_version,
             'Date and Time' : now.strftime("%d/%m/%Y %H:%M:%S"),
-            'Train': scene.train_data,
-            'Test': scene.test_data,
+            'Train': scene.train_test_data == "train_data",
+            'Test': scene.train_test_data == "test_data",
             'AABB': scene.aabb,
             'Render Frames': scene.render_frames,
             'File Format': 'NeRF' if scene.nerf else 'NGP',

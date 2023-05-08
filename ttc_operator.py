@@ -39,12 +39,12 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         # initial property might have changed since set_init_props update
         scene.init_output_path = scene.render.filepath
 
-        if scene.test_data:
+        if scene.train_test_data == "test_data":
             # testing transforms
             output_test_data['frames'] = self.get_camera_extrinsics(scene, test_camera, mode='TEST', method='TTC')
             self.save_json(output_path, 'transforms_test.json', output_test_data)
 
-        if scene.train_data:
+        if scene.train_test_data == "train_data":
             # training transforms
             output_train_data['frames'] = self.get_camera_extrinsics(scene, train_camera, mode='TRAIN', method='TTC')
             self.save_json(output_path, 'transforms_train.json', output_train_data)
