@@ -7,7 +7,7 @@ bl_info = {
     'name': 'BlenderNeRF',
     'description': 'Easy NeRF synthetic dataset creation within Blender',
     'author': 'Maxime Raafat',
-    'version': (4, 0, 1),
+    'version': (4, 0, 0),
     'blender': (3, 0, 0),
     'location': '3D View > N panel > BlenderNeRF',
     'doc_url': 'https://github.com/maximeraafat/BlenderNeRF',
@@ -19,11 +19,13 @@ TRAIN_CAM = 'Train Cam'
 TEST_CAM = 'Test Cam'
 VERSION = '.'.join(str(x) for x in bl_info['version'])
 
+enum_items = (('train_data','Train',''),('test_data','Test',''))
+
 # addon blender properties
 PROPS = [
     # global controllable properties
-    ('train_data', bpy.props.BoolProperty(name='Train', description='Construct the training data', default=True) ),
-    ('test_data', bpy.props.BoolProperty(name='Test', description='Construct the testing data', default=True) ),
+    ('train_test_data', bpy.props.EnumProperty(items=enum_items, name='Train or Test set', description='Whether training or test set should be exported', default='train_data') ),
+
     ('aabb', bpy.props.IntProperty(name='AABB', description='AABB scale as defined in Instant NGP', default=4, soft_min=1, soft_max=128) ),
     ('render_frames', bpy.props.BoolProperty(name='Render Frames', description='Whether training frames should be rendered. If not selected, only the transforms.json files will be generated', default=True) ),
     ('logs', bpy.props.BoolProperty(name='Save Log File', description='Whether to create a log file containing information on the BlenderNeRF run', default=False) ),
@@ -57,7 +59,7 @@ PROPS = [
     ('show_sphere', bpy.props.BoolProperty(name='Sphere', description='Whether to show the training sphere from which random views will be sampled', default=False, update=helper.visualize_sphere) ),
     ('show_camera', bpy.props.BoolProperty(name='Camera', description='Whether to show the training camera', default=False, update=helper.visualize_camera) ),
     ('upper_views', bpy.props.BoolProperty(name='Upper Views', description='Whether to sample views from the upper hemisphere of the training sphere only', default=False) ),
-    ('outwards', bpy.props.BoolProperty(name='Outwards', description='Whether to point the camera outwards of the training sphere', default=False, update=helper.properties_ui_upd) ),
+    ('outwards', bpy.props.BoolProperty(name='Outwards', description='Whether to point the camera outwards of the training sphere', default=False) ),
 
     # cos automatic properties
     ('sphere_exists', bpy.props.BoolProperty(name='Sphere Exists', description='Whether the sphere exists', default=False) ),
