@@ -4,7 +4,7 @@ import bpy
 # blender nerf shared ui properties class
 class BlenderNeRF_UI(bpy.types.Panel):
     '''BlenderNeRF UI'''
-    bl_idname = 'panel.blender_nerf_ui'
+    bl_idname = 'VIEW3D_PT_blender_nerf_ui'
     bl_label = 'BlenderNeRF shared UI'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'

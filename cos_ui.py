@@ -4,7 +4,7 @@ import bpy
 # camera on sphere ui class
 class COS_UI(bpy.types.Panel):
     '''Camera on Sphere UI'''
-    bl_idname = 'panel.cos_ui'
+    bl_idname = 'VIEW3D_PT_cos_ui'
     bl_label = 'Camera on Sphere COS'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'

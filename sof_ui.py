@@ -4,7 +4,7 @@ import bpy
 # subset of frames ui class
 class SOF_UI(bpy.types.Panel):
     '''Subset of Frames UI'''
-    bl_idname = 'panel.sof_ui'
+    bl_idname = 'VIEW3D_PT_sof_ui'
     bl_label = 'Subset of Frames SOF'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'

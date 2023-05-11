@@ -166,7 +166,7 @@ def properties_desgraph(scene):
     if CAMERA_NAME in scene.objects.keys():
         scene.objects[CAMERA_NAME].location = sample_from_sphere(scene)
 
-def empty_fn(self): pass
+def empty_fn(self, context): pass
 
 can_scene_upd = properties_ui
 can_properties_upd = properties_desgraph
