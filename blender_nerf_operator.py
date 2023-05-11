@@ -14,35 +14,52 @@ CAMERA_NAME = 'BlenderNeRF Camera'
 # blender nerf operator parent class
 class BlenderNeRF_Operator(bpy.types.Operator):
 
-    # camera intrinsics : https://blender.stackexchange.com/questions/38009/3x4-camera-matrix-from-blender-camera
-    def get_camera_intrinsics(self, scene,camera):
+    # camera intrinsics
+    def get_camera_intrinsics(self, scene, camera):
         camera_angle_x = camera.data.angle_x
         camera_angle_y = camera.data.angle_y
 
-        f_in_mm = camera.data.lens
+        # camera properties
+        f_in_mm = camera.data.lens # focal length in mm
         scale = scene.render.resolution_percentage / 100
-        pixel_aspect_ratio = scene.render.pixel_aspect_y / scene.render.pixel_aspect_x
-        width_res_in_px = scene.render.resolution_x * scale
-        height_res_in_px = scene.render.resolution_y * scale
-
+        width_res_in_px = scene.render.resolution_x * scale # width
+        height_res_in_px = scene.render.resolution_y * scale # height
         optical_center_x = width_res_in_px / 2
         optical_center_y = height_res_in_px / 2
 
-        sensor_size_in_mm = camera.data.sensor_height if camera.data.sensor_fit == 'VERTICAL' else camera.data.sensor_width
-
+        # pixel aspect ratios
         size_x = scene.render.pixel_aspect_x * width_res_in_px
         size_y = scene.render.pixel_aspect_y * height_res_in_px
+        pixel_aspect_ratio = scene.render.pixel_aspect_x / scene.render.pixel_aspect_y
 
+        # sensor fit and sensor size (and camera angle swap in specific cases)
         if camera.data.sensor_fit == 'AUTO':
-            sensor_fit = 'HORIZONTAL' if size_x >= size_y else 'VERTICAL'
-        else :
+            sensor_size_in_mm = camera.data.sensor_height if width_res_in_px < height_res_in_px else camera.data.sensor_width
+            if width_res_in_px < height_res_in_px:
+                sensor_fit = 'VERTICAL'
+                camera_angle_x, camera_angle_y = camera_angle_y, camera_angle_x
+            elif width_res_in_px > height_res_in_px:
+                sensor_fit = 'HORIZONTAL'
+            else:
+                sensor_fit = 'VERTICAL' if size_x <= size_y else 'HORIZONTAL'
+
+        else:
             sensor_fit = camera.data.sensor_fit
+            if sensor_fit == 'VERTICAL':
+                sensor_size_in_mm = camera.data.sensor_height if width_res_in_px <= height_res_in_px else camera.data.sensor_width
+                if width_res_in_px <= height_res_in_px:
+                    camera_angle_x, camera_angle_y = camera_angle_y, camera_angle_x
 
-        view_fac_in_px = width_res_in_px if sensor_fit == 'HORIZONTAL' else pixel_aspect_ratio * height_res_in_px
-        pixel_size_mm_per_px = sensor_size_in_mm / f_in_mm / view_fac_in_px
+        # focal length for horizontal sensor fit
+        if sensor_fit == 'HORIZONTAL':
+            sensor_size_in_mm = camera.data.sensor_width
+            s_u = f_in_mm / sensor_size_in_mm * width_res_in_px
+            s_v = f_in_mm / sensor_size_in_mm * width_res_in_px * pixel_aspect_ratio
 
-        s_u = 1 / pixel_size_mm_per_px
-        s_v = 1 / pixel_size_mm_per_px / pixel_aspect_ratio
+        # focal length for vertical sensor fit
+        if sensor_fit == 'VERTICAL':
+            s_u = f_in_mm / sensor_size_in_mm * width_res_in_px / pixel_aspect_ratio
+            s_v = f_in_mm / sensor_size_in_mm * width_res_in_px
 
         camera_intr_dict = {
             'camera_angle_x': camera_angle_x,
