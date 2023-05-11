@@ -44,7 +44,7 @@ Although release versions of **BlenderNeRF** are available for download, they ar
 
 ### Subset of Frames
 
-**Subset of Frames (SOF)** renders every **N** frames from a camera animation, and utilises the rendered subset of frames as NeRF training data. The registered testing data spans over all frames of the same camera amimation, including training frames. When trained, the NeRF model can render the full camera animation and is consequently well suited for rendering large animation of static scenes.
+**Subset of Frames (SOF)** renders every **N** frames from a camera animation, and utilises the rendered subset of frames as NeRF training data. The registered testing data spans over all frames of the same camera amimation, including training frames. When trained, the NeRF model can render the full camera animation and is consequently well suited for interpolating or rendering large animations of static scenes.
 
 ### Train and Test Cameras
 
@@ -79,29 +79,30 @@ Below are described the properties specific to each method (the `Name` property 
 
 * `Frame Step` (by default set to **3**) : **N** (as defined in the [Setting](#setting) section) = frequency at which the training frames are registered
 * `Camera` (always set to the active camera) : camera used for registering training and testing data
-* `PLAY SOF` : play the **Subset of Frames** method
+* `PLAY SOF` : play the **Subset of Frames** method operator to export NeRF data
 
 ### How to TTC
 
+* `Frames` (by default set to **100**) : number of training frames used from the training camera
 * `Train Cam` (empty by default) : camera used for registering the training data
 * `Test Cam` (empty by default) : camera used for registering the testing data
-* `PLAY TTC` : play the **Train and Test Cameras** method
+* `PLAY TTC` : play the **Train and Test Cameras** method operator to export NeRF data
 
 ### How to COS
 
 * `Camera` (always set to the active camera) : camera used for registering the testing data
-* `Location` (by default set to **0m** vector) : center position of the training sphere from which camera views are sampled
+* `Location` (by default set to **0 m** vector) : center position of the training sphere from which camera views are sampled
 * `Rotation` (by default set to **0°** vector) : rotation of the training sphere from which camera views are sampled
 * `Scale` (by default set to **1** vector) : scale vector of the training sphere in xyz axes
-* `Radius` (by default set to **4m**) : radius scalar of the training sphere
-* `Lens` (by default set to **50mm**) : focal length of the training camera
+* `Radius` (by default set to **4 m**) : radius scalar of the training sphere
+* `Lens` (by default set to **50 mm**) : focal length of the training camera
 * `Seed` (by default set to **0**) : seed to initialize the random camera view sampling procedure
 * `Frames` (by default set to **100**) : number of training frames sampled and rendered from the training sphere
 * `Sphere` (deactivated by default) : whether to show the training sphere from which random views will be sampled
 * `Camera` (deactivated by default) : whether to show the camera used for registering the training data
 * `Upper Views` (deactivated by default) : whether to sample views from the upper training hemisphere only (rotation variant)
 * `Outwards` (deactivated by default) : whether to point the camera outwards of the training sphere
-* `PLAY COS` : play the **Camera on Sphere** method
+* `PLAY COS` : play the **Camera on Sphere** method operator to export NeRF data
 
 Note that activating the `Sphere` and `Camera` properties creates a `BlenderNeRF Sphere` empty object and a `BlenderNeRF Camera` camera object respectively. Please do not create any objects with these names manually, since this might break the add-on functionalities.
 
@@ -110,7 +111,7 @@ Note that activating the `Sphere` and `Camera` properties creates a `BlenderNeRF
 
 ## Tips for optimal results
 
-NVIDIA provides a few helpful tips on how to train a NeRF model using [Instant NGP](https://github.com/NVlabs/instant-ngp/blob/master/docs/nerf_dataset_tips.md). Feel free to visit their repository for further help. Below are some quick tips for optimal **nerfing**.
+NVIDIA provides a few helpful tips on how to train a NeRF model using [Instant NGP](https://github.com/NVlabs/instant-ngp/blob/master/docs/nerf_dataset_tips.md). Feel free to visit their repository for further help. Below are some quick tips for optimal **nerfing** gained from personal experience.
 
 * NeRF trains best with 50 to 150 images
 * Testing views should not deviate too much from training views
@@ -119,6 +120,8 @@ NVIDIA provides a few helpful tips on how to train a NeRF model using [Instant N
 * Keep `AABB` as tight as possible to the scene scale, higher values will slow down training
 * If the reconstruction quality appears blurry, start by adjusting `AABB` while keeping it a power of 2
 * Avoid adjusting the camera focal lengths during the animation, the vanilla NeRF methods do not support multiple focal lengths
+* Avoid extreme focal lengths, values between 30 mm and 70 mm work well in practice
+* A `Vertical` camera sensor fit sometimes leads to distorted NeRF volumes, avoid it if possible
 
 
 ## How to run NeRF
