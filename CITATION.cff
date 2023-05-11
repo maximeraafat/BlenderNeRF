@@ -5,7 +5,7 @@ authors:
   given-names: "Maxime"
   orcid: "https://orcid.org/0000-0000-0000-0000"
 title: "BlenderNeRF"
-version: 4.0.0
-doi: 10.5281/zenodo.7632843
-date-released: 2023-02-11
+version: 5.0.0
+doi: 10.5281/zenodo.7926211
+date-released: 2023-05-11
 url: "https://github.com/maximeraafat/BlenderNeRF"
