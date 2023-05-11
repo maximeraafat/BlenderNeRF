@@ -86,7 +86,12 @@ class BlenderNeRF_Operator(bpy.types.Operator):
 
         initFrame = scene.frame_current
         step = scene.train_frame_steps if (mode == 'TRAIN' and method == 'SOF') else scene.frame_step
-        end = scene.frame_start + scene.nb_frames - 1 if (mode == 'TRAIN' and method == 'COS') else scene.frame_end
+        if (mode == 'TRAIN' and method == 'COS'):
+            end = scene.frame_start + scene.cos_nb_frames - 1
+        elif (mode == 'TRAIN' and method == 'TTC'):
+            end = scene.frame_start + scene.ttc_nb_frames - 1
+        else:
+            end = scene.frame_end
 
         camera_extr_dict = []
         for frame in range(scene.frame_start, end + 1, step):
@@ -183,6 +188,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         elif method == 'TTC':
             logdata['Train Camera Name'] = scene.camera_train_target.name
             logdata['Test Camera Name'] = scene.camera_test_target.name
+            logdata['Frames'] = scene.ttc_nb_frames
             logdata['Dataset Name'] = scene.ttc_dataset_name
 
         else:
@@ -193,7 +199,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             logdata['Radius'] = scene.sphere_radius
             logdata['Lens'] = str(scene.focal) + ' mm'
             logdata['Seed'] = scene.seed
-            logdata['Frames'] = scene.nb_frames
+            logdata['Frames'] = scene.cos_nb_frames
             logdata['Upper Views'] = scene.upper_views
             logdata['Outwards'] = scene.outwards
             logdata['Dataset Name'] = scene.cos_dataset_name

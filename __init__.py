@@ -42,6 +42,7 @@ PROPS = [
 
     # ttc properties
     ('ttc_dataset_name', bpy.props.StringProperty(name='Name', description='Name of the TTC dataset : the data will be stored under <save path>/<name>', default='dataset') ),
+    ('ttc_nb_frames', bpy.props.IntProperty(name='Frames', description='Number of training frames from the training camera', default=100, soft_min=1) ),
     ('camera_train_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TRAIN_CAM, description='Pointer to the training camera', poll=helper.poll_is_camera) ),
     ('camera_test_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TEST_CAM, description='Pointer to the testing camera', poll=helper.poll_is_camera) ),
 
@@ -53,7 +54,7 @@ PROPS = [
     ('sphere_radius', bpy.props.FloatProperty(name='Radius', description='Radius scale of the training sphere', default=4.0, soft_min=0.01, unit='LENGTH', update=helper.properties_ui_upd) ),
     ('focal', bpy.props.FloatProperty(name='Lens', description='Focal length of the training camera', default=50, soft_min=1, soft_max=5000, unit='CAMERA', update=helper.properties_ui_upd) ),
     ('seed', bpy.props.IntProperty(name='Seed', description='Random seed for sampling views on the training sphere', default=0) ),
-    ('nb_frames', bpy.props.IntProperty(name='Frames', description='Number of training frames randomly sampled from the training sphere', default=100, soft_min=1) ),
+    ('cos_nb_frames', bpy.props.IntProperty(name='Frames', description='Number of training frames randomly sampled from the training sphere', default=100, soft_min=1) ),
     ('show_sphere', bpy.props.BoolProperty(name='Sphere', description='Whether to show the training sphere from which random views will be sampled', default=False, update=helper.visualize_sphere) ),
     ('show_camera', bpy.props.BoolProperty(name='Camera', description='Whether to show the training camera', default=False, update=helper.visualize_camera) ),
     ('upper_views', bpy.props.BoolProperty(name='Upper Views', description='Whether to sample views from the upper hemisphere of the training sphere only', default=False) ),

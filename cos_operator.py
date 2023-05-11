@@ -69,7 +69,7 @@ class CameraOnSphere(blender_nerf_operator.BlenderNeRF_Operator):
                 output_train = os.path.join(output_path, 'train')
                 os.makedirs(output_train, exist_ok=True)
                 scene.rendering = (False, False, True)
-                scene.frame_end = scene.frame_start + scene.nb_frames - 1 # update end frame
+                scene.frame_end = scene.frame_start + scene.cos_nb_frames - 1 # update end frame
                 scene.render.filepath = os.path.join(output_train, '') # training frames path
                 bpy.ops.render.render('INVOKE_DEFAULT', animation=True, write_still=True) # render scene
 

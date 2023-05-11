@@ -36,8 +36,9 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
 
         if scene.logs: self.save_log_file(scene, output_path, method='TTC')
 
-        # initial property might have changed since set_init_props update
+        # initial properties might have changed since set_init_props update
         scene.init_output_path = scene.render.filepath
+        scene.init_frame_end = scene.frame_end
 
         if scene.test_data:
             # testing transforms
@@ -54,6 +55,7 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
                 output_train = os.path.join(output_path, 'train')
                 os.makedirs(output_train, exist_ok=True)
                 scene.rendering = (False, True, False)
+                scene.frame_end = scene.frame_start + scene.ttc_nb_frames - 1 # update end frame
                 scene.render.filepath = os.path.join(output_train, '') # training frames path
                 bpy.ops.render.render('INVOKE_DEFAULT', animation=True, write_still=True) # render scene
 

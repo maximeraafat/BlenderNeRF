@@ -26,7 +26,7 @@ class COS_UI(bpy.types.Panel):
         layout.prop(scene, 'focal')
         layout.prop(scene, 'seed')
 
-        layout.prop(scene, 'nb_frames')
+        layout.prop(scene, 'cos_nb_frames')
         layout.prop(scene, 'upper_views', toggle=True)
         layout.prop(scene, 'outwards', toggle=True)
 
