@@ -88,6 +88,8 @@ Below are described the properties specific to each method (the `Name` property 
 * `Test Cam` (empty by default) : camera used for registering the testing data
 * `PLAY TTC` : play the **Train and Test Cameras** method operator to export NeRF data
 
+`Frames` amount of training frames will be captured using the `Train Cam` object, starting from the scene start frame.
+
 ### How to COS
 
 * `Camera` (always set to the active camera) : camera used for registering the testing data
