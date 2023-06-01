@@ -63,7 +63,7 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
             if scene.render_frames:
                 scene.is_rendering = (False, True, False)
                 scene.render.filepath = os.path.join(output_train, '') # training frames path
-                bpy.ops.render.render('INVOKE_DEFAULT', animation=True, write_still=True) # render scene
+                bpy.ops.render.render(scene='INVOKE_DEFAULT', animation=True, write_still=True) # render scene
 
         # if frames are rendered, the below code is executed by the handler function
         if not any(scene.is_rendering):

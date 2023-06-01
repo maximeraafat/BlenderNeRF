@@ -51,6 +51,10 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         s_u = 1 / pixel_size_mm_per_px
         s_v = 1 / pixel_size_mm_per_px / pixel_aspect_ratio
 
+        K = [[s_u, 0, optical_center_x],
+             [0, s_v, optical_center_y],
+             [0, 0, 1]]
+
         camera_intr_dict = {
             'camera_angle_x': camera_angle_x,
             'camera_angle_y': camera_angle_y,
@@ -64,6 +68,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             'cy': optical_center_y,
             'w': width_res_in_px,
             'h': height_res_in_px,
+            'K': K,
             'aabb_scale': scene.aabb
         }
 
@@ -72,27 +77,38 @@ class BlenderNeRF_Operator(bpy.types.Operator):
     # camera extrinsics (transform matrices)
     def get_camera_extrinsics(self, scene, camera, mode='TRAIN', method='SOF'):
         assert mode == 'TRAIN' or mode == 'TEST'
-        assert method == 'SOF' or method == 'TTC' or method == 'COS'
+        assert method == 'SOF' or method == 'TTC' or method == 'COS' or method == 'DFC'
 
+        scene.camera = camera
         initFrame = scene.frame_current
         step = scene.train_frame_steps if (mode == 'TRAIN' and method == 'SOF') else scene.frame_step
 
         camera_extr_dict = []
-        for frame in range(scene.frame_start, scene.frame_end + 1, step):
-            scene.frame_set(frame)
-            filename = os.path.basename( scene.render.frame_path(frame=frame) )
-            filedir = OUTPUT_TRAIN * (mode == 'TRAIN') + OUTPUT_TEST * (mode == 'TEST')
+        if method != "DFC":
+            for frame in range(scene.frame_start, scene.frame_end + 1, step):
+                scene.frame_set(frame)
+                filename = os.path.basename( scene.render.frame_path(frame=frame) )
+                filedir = OUTPUT_TRAIN * (mode == 'TRAIN') + OUTPUT_TEST * (mode == 'TEST')
+                filepath = os.path.join(filedir, filename)
+                frame_data = {
+                    'file_path': filepath,
+                    'transform_matrix': listify_matrix( camera.matrix_world )
+                }
 
+                camera_extr_dict.append(frame_data)
+
+            scene.frame_set(initFrame) # set back to initial frame
+
+            return camera_extr_dict
+        else:
+            filedir = OUTPUT_TRAIN * (mode == 'TRAIN') + OUTPUT_TEST * (mode == 'TEST')
+            filepath = os.path.join(filedir, f"{camera.name}.png")
             frame_data = {
-                'file_path': os.path.join(filedir, filename),
+                'file_path': filepath,
                 'transform_matrix': listify_matrix( camera.matrix_world )
             }
-
             camera_extr_dict.append(frame_data)
-
-        scene.frame_set(initFrame) # set back to initial frame
-
-        return camera_extr_dict
+            return camera_extr_dict
 
     def save_json(self, directory, filename, data, indent=4):
         filepath = os.path.join(directory, filename)
@@ -103,7 +119,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         return math.log2(x).is_integer()
 
     def asserts(self, scene, method='SOF'):
-        assert method == 'SOF' or method == 'TTC' or method == 'COS'
+        assert method == 'SOF' or method == 'TTC' or method == 'COS' or method == 'DFC'
 
         camera = scene.camera
         train_camera = scene.camera_train_target

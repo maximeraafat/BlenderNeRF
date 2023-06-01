@@ -2,7 +2,7 @@ import os
 import shutil
 import bpy
 from bpy.app.handlers import persistent
-from . import blender_nerf_ui, sof_ui, ttc_ui, sof_operator, ttc_operator
+from . import blender_nerf_ui, sof_ui, ttc_ui, cos_ui, sof_operator, ttc_operator, cos_operator, dataset_from_cameras_operator, dataset_from_cameras_ui
 
 
 bl_info = {
@@ -47,6 +47,15 @@ PROPS = [
     ('ttc_dataset_name', bpy.props.StringProperty(name='Name', description='Name of the TTC dataset : the data will be stored under <save path>/<name>', default='dataset') ),
     ('camera_train_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TRAIN_CAM, description='Pointer to training camera', poll=poll_is_camera) ),
     ('camera_test_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TEST_CAM, description='Pointer to testing camera', poll=poll_is_camera) ),
+
+    ('cos_radius', bpy.props.FloatProperty(name='Sampling Radius', description='Radius of the COS sampling sphere', default=5.0, soft_min=0.0) ),
+    ('cos_train_num_samples', bpy.props.IntProperty(name='Num Samples', description='Number of samples to take from the COS sampling sphere', default=64, soft_min=1) ),
+    ('cos_test_num_samples', bpy.props.IntProperty(name='Num Samples', description='Number of samples to take from the COS sampling sphere', default=5, soft_min=1) ),
+    ('cos_above_horizon_only', bpy.props.BoolProperty(name='Above Horizon Only', description='Whether to only sample points above the horizon', default=True) ),
+
+    ('train_camera_collection', bpy.props.PointerProperty(type=bpy.types.Collection, name='Train Camera Collection', description='Collection containing the cameras to use for the Train dataset') ),
+    ('test_camera_collection', bpy.props.PointerProperty(type=bpy.types.Collection, name='Test Camera Collection', description='Collection containing the cameras to use for the Test dataset') ),
+    ('dfc_dataset_name', bpy.props.StringProperty(name='Name', description='Name of the DFC dataset : the data will be stored under <save path>/<name>', default='dataset') ),
 ]
 
 # classes to register / unregister
@@ -54,8 +63,12 @@ CLASSES = [
     blender_nerf_ui.BlenderNeRF_UI,
     sof_ui.SOF_UI,
     ttc_ui.TTC_UI,
+    cos_ui.COS_UI,
     sof_operator.SubsetOfFrames,
-    ttc_operator.TrainTestCameras
+    ttc_operator.TrainTestCameras,
+    cos_operator.RandomCamerasAroundOrigin,
+    dataset_from_cameras_operator.DatasetFromCameras,
+    dataset_from_cameras_ui.DatasetFromCameras_UI,
 ]
 
 
@@ -73,7 +86,7 @@ def post_render(scene):
 
         # clean directory name (unsupported characters replaced) and output path
         output_dir = bpy.path.clean_name(method_dataset_name)
-        output_path = os.path.join(scene.save_path, output_dir)
+        output_path = os.path.join(bpy.path.abspath(scene.save_path), output_dir)
 
         # compress dataset and remove folder (only keep zip)
         shutil.make_archive(output_path, 'zip', output_path) # output filename = output_path
