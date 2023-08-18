@@ -156,7 +156,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         if method == 'COS' and any(x == 0 for x in scene.sphere_scale):
             error_messages.append('The BlenderNeRF Sphere cannot be flat! Change its scale to be non zero in all axes.')
 
-        if not self.is_power_of_two(scene.aabb):
+        if not scene.nerf and not self.is_power_of_two(scene.aabb):
             error_messages.append('AABB scale needs to be a power of two!')
 
         if scene.save_path == '':

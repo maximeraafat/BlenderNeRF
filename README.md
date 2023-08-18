@@ -8,11 +8,13 @@ Whether a VFX artist, a research fellow or a graphics amateur, **BlenderNeRF** i
   Are you ready to NeRF? Start with a single click in Blender by checking out <a href="https://youtu.be/C8YuDoU11cg">this tutorial</a>!
 </p>
 
+
 ## Neural Radiance Fields
 
 **Neural Radiance Fields ([NeRF](https://www.matthewtancik.com/nerf))** aim at representing a 3D scene as a view dependent volumetric object from 2D images only, alongside their respective camera information. The 3D scene is reverse engineered from the training images with help of a simple neural network.
 
 I recommend watching [this YouTube video](https://www.youtube.com/watch?v=YX5AoaWrowY) by **Corridor Crew** for a thrilling investigation on a few use cases and future potential applications of NeRFs.
+
 
 ## Motivation
 
@@ -23,6 +25,7 @@ NeRFs can speed up this process, but require camera information typically extrac
 <p align='center'>
   <img src='https://maximeraafat.github.io/assets/posts/blendernerf/BlenderNeRF_compressed.gif' width='90%'/>
 </p>
+
 
 ## Installation
 
