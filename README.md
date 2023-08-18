@@ -2,6 +2,11 @@
 
 Whether a VFX artist, a research fellow or a graphics amateur, **BlenderNeRF** is the easiest and fastest way to create synthetic NeRF datasets within Blender. Obtain renders and camera parameters with a single click, while having full user control over the 3D scene and camera!
 
+<p align='center'>
+  <a href="https://youtu.be/C8YuDoU11cg"><img src="https://img.youtube.com/vi/C8YuDoU11cg/maxresdefault.jpg" width='90%'></a>
+  <br>
+  Are you ready to NeRF? Start with a single click in Blender by checking out <a href="https://youtu.be/C8YuDoU11cg">this tutorial</a>!
+</p>
 
 ## Neural Radiance Fields
 
@@ -9,24 +14,15 @@ Whether a VFX artist, a research fellow or a graphics amateur, **BlenderNeRF** i
 
 I recommend watching [this YouTube video](https://www.youtube.com/watch?v=YX5AoaWrowY) by **Corridor Crew** for a thrilling investigation on a few use cases and future potential applications of NeRFs.
 
-<p align='center'>
-  <img src='https://maximeraafat.github.io/assets/posts/donut_3/Donut3_compressed.gif' width='45%'/>
-  <img src='https://maximeraafat.github.io/assets/posts/donut_3/Donut3_NeRF_compressed.gif' width='45%'>
-  <br>
-  <b>
-    Left : traditional rendering with Eevee
-    <br>
-    Right : NeRF rendering
-  </b>
-</p>
-
-
 ## Motivation
 
 Rendering is an expensive computation. Photorealistic scenes can take seconds to hours to render depending on the scene complexity, hardware and available software resources.
 
 NeRFs can speed up this process, but require camera information typically extracted via cumbersome code. This plugin enables anyone to get renders and cameras with a single click in Blender.
 
+<p align='center'>
+  <img src='https://maximeraafat.github.io/assets/posts/blendernerf/BlenderNeRF_compressed.gif' width='90%'/>
+</p>
 
 ## Installation
 
@@ -135,7 +131,7 @@ Open this [COLAB notebook](https://colab.research.google.com/drive/1dQInHx0Eg5LZ
 
 ## Remarks
 
-This add-on is being developed as a fun side project over the course of multiple months and versions of Blender, mainly on macOS. If you encouter any issues with the plug-in functionalities, feel free to open a GitHub issue with a clear description of the problem, which **BlenderNeRF** version the issues have been experienced with, and any further information if relevant.
+This add-on is being developed as a fun side project over the course of multiple months and versions of Blender, mainly on macOS. If you encouter any issues with the plugin functionalities, feel free to open a GitHub issue with a clear description of the problem, which **BlenderNeRF** version the issues have been experienced with, and any further information if relevant.
 
 ### Real World Data
 
