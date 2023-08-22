@@ -29,12 +29,12 @@ NeRFs can speed up this process, but require camera information typically extrac
 
 ## Installation
 
-1. Download this repository as a ZIP file
+1. Download this repository as a **ZIP** file
 2. Open Blender (3.0.0 or above)
 3. In Blender, head to **Edit > Preferences > Add-ons**, and click **Install...**
 4. Select the downloaded **ZIP** file, and activate the add-on (**Object: BlenderNeRF**)
 
-Although release versions of **BlenderNeRF** are available for download, they are primarily intended for tracking major code changes and for citation purposes. I recommend dowloading the current repository directly, since minor changes or bug fixes might not be included in a release right away.
+Although release versions of **BlenderNeRF** are available for download, they are primarily intended for tracking major code changes and for citation purposes. I recommend downloading the current repository directly, since minor changes or bug fixes might not be included in a release right away.
 
 
 ## Setting
@@ -43,7 +43,7 @@ Although release versions of **BlenderNeRF** are available for download, they ar
 
 ### Subset of Frames
 
-**Subset of Frames (SOF)** renders every **N** frames from a camera animation, and utilises the rendered subset of frames as NeRF training data. The registered testing data spans over all frames of the same camera amimation, including training frames. When trained, the NeRF model can render the full camera animation and is consequently well suited for interpolating or rendering large animations of static scenes.
+**Subset of Frames (SOF)** renders every **N** frames from a camera animation, and utilises the rendered subset of frames as NeRF training data. The registered testing data spans over all frames of the same camera animation, including training frames. When trained, the NeRF model can render the full camera animation and is consequently well suited for interpolating or rendering large animations of static scenes.
 
 ### Train and Test Cameras
 
