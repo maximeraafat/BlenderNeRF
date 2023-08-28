@@ -45,13 +45,25 @@ Although release versions of **BlenderNeRF** are available for download, they ar
 
 **Subset of Frames (SOF)** renders every **N** frames from a camera animation, and utilises the rendered subset of frames as NeRF training data. The registered testing data spans over all frames of the same camera animation, including training frames. When trained, the NeRF model can render the full camera animation and is consequently well suited for interpolating or rendering large animations of static scenes.
 
+<p align='center'>
+  <img src='https://maximeraafat.github.io/assets/posts/blendernerf/SOF.gif' width='90%'/>
+</p>
+
 ### Train and Test Cameras
 
 **Train and Test Cameras (TTC)** registers training and testing data from two separate user defined cameras. A NeRF model can then be fitted with the data extracted from the training camera, and be evaluated on the testing data.
 
+<p align='center'>
+  <img src='https://maximeraafat.github.io/assets/posts/blendernerf/TTC.gif' width='90%'/>
+</p>
+
 ### Camera on Sphere
 
 **Camera on Sphere (COS)** renders training frames by uniformly sampling random camera views directed at the center from a user controlled sphere. Testing data is extracted from a selected camera.
+
+<p align='center'>
+  <img src='https://maximeraafat.github.io/assets/posts/blendernerf/COS.gif' width='90%'/>
+</p>
 
 
 ## How to use the Methods
@@ -125,7 +137,7 @@ NVIDIA provides a few helpful tips on how to train a NeRF model using [Instant N
 * A `Vertical` camera sensor fit sometimes leads to distorted NeRF volumes, avoid it if possible
 
 
-## How to run NeRF
+## How to NeRF
 
 If you have access to an NVIDIA GPU, you might want to install [Instant NGP](https://github.com/NVlabs/instant-ngp#installation) on your own device for an optimal user experience, by following the instructions provided on their repository. Otherwise, you can run NeRF in a COLAB notebook on Google GPUs for free with a Google account.
 
@@ -134,7 +146,7 @@ Open this [COLAB notebook](https://colab.research.google.com/drive/1dQInHx0Eg5LZ
 
 ## Remarks
 
-This add-on is being developed as a fun side project over the course of multiple months and versions of Blender, mainly on macOS. If you encouter any issues with the plugin functionalities, feel free to open a GitHub issue with a clear description of the problem, which **BlenderNeRF** version the issues have been experienced with, and any further information if relevant.
+This add-on is being developed as a fun side project over the course of multiple months and versions of Blender, mainly on macOS. If you encounter any issues with the plugin functionalities, feel free to open a GitHub issue with a clear description of the problem, which **BlenderNeRF** version the issues have been experienced with, and any further information if relevant.
 
 ### Real World Data
 
