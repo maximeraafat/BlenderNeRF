@@ -122,7 +122,7 @@ Note that activating the `Sphere` and `Camera` properties creates a `BlenderNeRF
 `Frames` amount of training frames will be captured using the `BlenderNeRF Camera` object, starting from the scene start frame. Finally, keep in mind that the training camera is locked in place and cannot manually be moved.
 
 
-## Tips for optimal results
+## Tips for Optimal Results
 
 NVIDIA provides a few helpful tips on how to train a NeRF model using [Instant NGP](https://github.com/NVlabs/instant-ngp/blob/master/docs/nerf_dataset_tips.md). Feel free to visit their repository for further help. Below are some quick tips for optimal **nerfing** gained from personal experience.
 
