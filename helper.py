@@ -85,12 +85,12 @@ def delete_camera(scene, name):
 
 # non uniform sampling when stretched or squeezed sphere
 def sample_from_sphere(scene):
-    # (2 * seed + 1) * (time + 1) to avoid recurring sample for seed = 0 or time = 0
-    random.seed( (2 * scene.seed + 1) * (scene.frame_current + 1) )
+    seed = (2654435761 * (scene.seed + 1)) ^ (805459861 * (scene.frame_current + 1))
+    rng = random.Random(seed)
 
     # sample random angles
-    theta = random.random() * 2 * math.pi
-    phi = random.random() * 2 * math.pi
+    theta = rng.random() * 2 * math.pi
+    phi = math.acos(1. - 2. * rng.random())
 
     # uniform sample from unit sphere, given theta and phi
     unit_x = math.cos(theta) * math.sin(phi)
