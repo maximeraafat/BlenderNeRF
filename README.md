@@ -1,6 +1,6 @@
 # BlenderNeRF
 
-Whether a VFX artist, a research fellow or a graphics amateur, **BlenderNeRF** is the easiest and fastest way to create synthetic NeRF datasets within Blender. Obtain renders and camera parameters with a single click, while having full user control over the 3D scene and camera!
+Whether a VFX artist, a research fellow or a graphics amateur, **BlenderNeRF** is the easiest and fastest way to create synthetic NeRF and Gaussian Splatting datasets within Blender. Obtain renders and camera parameters with a single click, while having full user control over the 3D scene and camera!
 
 <p align='center'>
   <a href="https://youtu.be/C8YuDoU11cg"><img src="https://img.youtube.com/vi/C8YuDoU11cg/maxresdefault.jpg" width='90%'></a>
@@ -13,6 +13,8 @@ Whether a VFX artist, a research fellow or a graphics amateur, **BlenderNeRF** i
 
 **Neural Radiance Fields ([NeRF](https://www.matthewtancik.com/nerf))** aim at representing a 3D scene as a view dependent volumetric object from 2D images only, alongside their respective camera information. The 3D scene is reverse engineered from the training images with help of a simple neural network.
 
+[**Gaussian Splatting**](https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/) is a follow-up method for rendering radiance fields in a point-based manner. This representation is highly optimised for GPU rendering and leverages more traditional graphics techniques to achieve high frame rates.
+
 I recommend watching [this YouTube video](https://www.youtube.com/watch?v=YX5AoaWrowY) by **Corridor Crew** for a thrilling investigation on a few use cases and future potential applications of NeRFs.
 
 
@@ -20,7 +22,7 @@ I recommend watching [this YouTube video](https://www.youtube.com/watch?v=YX5Aoa
 
 Rendering is an expensive computation. Photorealistic scenes can take seconds to hours to render depending on the scene complexity, hardware and available software resources.
 
-NeRFs can speed up this process, but require camera information typically extracted via cumbersome code. This plugin enables anyone to get renders and cameras with a single click in Blender.
+NeRFs and Gaussian splats can speed up this process, but require camera information typically extracted via cumbersome code. This plugin enables anyone to get renders and cameras with a single click in Blender.
 
 <p align='center'>
   <img src='https://maximeraafat.github.io/assets/posts/blendernerf/BlenderNeRF_compressed.gif' width='90%'/>
@@ -76,7 +78,13 @@ The add-on properties panel is available under `3D View > N panel > BlenderNeRF`
 * `Render Frames` (activated by default) : whether to render the frames
 * `Save Log File` (deactivated by default) : whether to save a log file containing reproducibility information on the **BlenderNeRF** run
 * `File Format` (**NGP** by default) : whether to export the camera files in the Instant NGP or defaut NeRF file format convention
+* `Gaussian Points` (deactivated by default) : whether to export a `points3d.ply` file for Gaussian Splatting
+* `Gaussian Test Camera Poses` (**Dummy** by default): whether to export a dummy test camera file or the full set of test camera poses (only with `Gaussian Points`)
 * `Save Path` (empty by default) : path to the output directory in which the dataset will be created
+
+If the `Gaussian Points` property is active, **BlenderNeRF** will create an additional `points3d.ply` file from all visible meshes (at render time) where each vertex will be used as initialization point. Vertex colors will be stored if available, and set to black otherwise.
+
+The [**Gaussian Splatting**](https://github.com/graphdeco-inria/gaussian-splatting) repository natively supports **NeRF** datasets, but requires both train and test data. The `Dummy` option for the `Gaussian Test Camera Poses` property creates an empty test camera pose file, in the case no test images are needed. The `Full` option exports the default test camera poses, but will require separately rendering a `test` folder containing all the test renders.
 
 `AABB` is restricted to be an integer power of 2, it defines the side length of the bounding box volume in which NeRF will trace rays. The property was introduced with **NVIDIA's [Instant NGP](https://github.com/NVlabs/instant-ngp)** version of NeRF.
 
