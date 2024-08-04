@@ -31,6 +31,15 @@ class BlenderNeRF_UI(bpy.types.Panel):
                 layout.prop(scene, 'render_frames')
 
             layout.prop(scene, 'logs')
+            layout.prop(scene, 'splats')
+
+            if scene.splats:
+                layout.separator()
+                layout.label(text='Gaussian Test Camera Poses')
+                row = layout.row(align=True)
+                row.prop(scene, 'splats_test_dummy', toggle=True, text='Dummy')
+                row.prop(scene, 'splats_test_dummy', toggle=True, text='Full', invert_checkbox=True)
+
             layout.separator()
             layout.label(text='File Format')
 

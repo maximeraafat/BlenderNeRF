@@ -33,6 +33,7 @@ class SubsetOfFrames(blender_nerf_operator.BlenderNeRF_Operator):
         os.makedirs(output_path, exist_ok=True)
 
         if scene.logs: self.save_log_file(scene, output_path, method='SOF')
+        if scene.splats: self.save_splats_ply(scene, output_path)
 
         # initial properties might have changed since set_init_props update
         scene.init_frame_step = scene.frame_step

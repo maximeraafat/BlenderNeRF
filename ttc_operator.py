@@ -35,6 +35,7 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         os.makedirs(output_path, exist_ok=True)
 
         if scene.logs: self.save_log_file(scene, output_path, method='TTC')
+        if scene.splats: self.save_splats_ply(scene, output_path)
 
         # initial properties might have changed since set_init_props update
         scene.init_output_path = scene.render.filepath

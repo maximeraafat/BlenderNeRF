@@ -9,6 +9,7 @@ import bpy
 OUTPUT_TRAIN = 'train'
 OUTPUT_TEST = 'test'
 CAMERA_NAME = 'BlenderNeRF Camera'
+TMP_VERTEX_COLORS = 'blendernerf_vertex_colors_tmp'
 
 
 # blender nerf operator parent class
@@ -84,6 +85,9 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         assert mode == 'TRAIN' or mode == 'TEST'
         assert method == 'SOF' or method == 'TTC' or method == 'COS'
 
+        if scene.splats and scene.splats_test_dummy and mode == 'TEST':
+            return []
+
         initFrame = scene.frame_current
         step = scene.train_frame_steps if (mode == 'TRAIN' and method == 'SOF') else scene.frame_step
         if (mode == 'TRAIN' and method == 'COS'):
@@ -100,7 +104,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             filedir = OUTPUT_TRAIN * (mode == 'TRAIN') + OUTPUT_TEST * (mode == 'TEST')
 
             frame_data = {
-                'file_path': os.path.join(filedir, filename),
+                'file_path': os.path.join(filedir, os.path.splitext(filename)[0] if scene.splats else filename),
                 'transform_matrix': self.listify_matrix(camera.matrix_world)
             }
 
@@ -109,6 +113,44 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         scene.frame_set(initFrame) # set back to initial frame
 
         return camera_extr_dict
+
+    # export vertex colors for each visible mesh
+    def save_splats_ply(self, scene, directory):
+        # create temporary vertex colors
+        for obj in scene.objects:
+            if obj.type == 'MESH':
+                if not obj.data.vertex_colors:
+                    obj.data.vertex_colors.new(name=TMP_VERTEX_COLORS)
+
+        init_mode = bpy.context.object.mode
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+        init_active_object = bpy.context.active_object
+        init_selected_objects = bpy.context.selected_objects
+        bpy.ops.object.select_all(action='DESELECT')
+
+        # select only visible meshes
+        for obj in scene.objects:
+            if obj.type == 'MESH' and self.is_object_visible(obj):
+                obj.select_set(True)
+
+        # save ply file
+        bpy.ops.wm.ply_export(filepath=os.path.join(directory, 'points3d.ply'), export_normals=True, export_attributes=False, ascii_format=True)
+
+        # remove temporary vertex colors
+        for obj in scene.objects:
+            if obj.type == 'MESH' and self.is_object_visible(obj):
+                if obj.data.vertex_colors:
+                    obj.data.vertex_colors.remove(obj.data.vertex_colors[TMP_VERTEX_COLORS])
+
+        bpy.context.view_layer.objects.active = init_active_object
+        bpy.ops.object.select_all(action='DESELECT')
+
+        # reselect previously selected objects
+        for obj in init_selected_objects:
+            obj.select_set(True)
+
+        bpy.ops.object.mode_set(mode=init_mode)
 
     def save_json(self, directory, filename, data, indent=4):
         filepath = os.path.join(directory, filename)
@@ -124,6 +166,17 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         for row in matrix:
             matrix_list.append(list(row))
         return matrix_list
+
+    # check whether an object is visible in render
+    def is_object_visible(self, obj):
+        if obj.hide_render:
+            return False
+
+        for collection in obj.users_collection:
+            if collection.hide_render:
+                return False
+
+        return True
 
     # assert messages
     def asserts(self, scene, method='SOF'):
@@ -161,6 +214,12 @@ class BlenderNeRF_Operator(bpy.types.Operator):
 
         if scene.save_path == '':
             error_messages.append('Save path cannot be empty!')
+
+        if scene.splats and scene.splats_test_dummy and not scene.test_data:
+            error_messages.append('Gaussian Splatting requires a transforms_test.json file!')
+
+        if scene.splats and scene.render.image_settings.file_format != 'PNG':
+            error_messages.append('Gaussian Splatting requires PNG file extensions!')
 
         return error_messages
 
