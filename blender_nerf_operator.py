@@ -216,7 +216,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             error_messages.append('Save path cannot be empty!')
 
         if scene.splats and not scene.test_data:
-            error_messages.append('Gaussian Splatting requires a transforms_test.json file!')
+            error_messages.append('Gaussian Splatting requires test data!')
 
         if scene.splats and scene.render.image_settings.file_format != 'PNG':
             error_messages.append('Gaussian Splatting requires PNG file extensions!')
