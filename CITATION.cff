@@ -6,5 +6,6 @@ authors:
 orcid: https://orcid.org/0000-0000-0000-0000
 title: BlenderNeRF
 version: 6.0.0
+doi: 10.5281/zenodo.13250725
 date-released: 2024-08-06
 url: "https://github.com/maximeraafat/BlenderNeRF"
