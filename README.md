@@ -32,9 +32,9 @@ NeRFs and Gaussian splats can speed up this process, but require camera informat
 ## Installation
 
 1. Download this repository as a **ZIP** file
-2. Open Blender (3.0.0 or above)
-3. In Blender, head to **Edit > Preferences > Add-ons**, and click **Install...**
-4. Select the downloaded **ZIP** file, and activate the add-on (**Object: BlenderNeRF**)
+2. Open Blender (4.0.0 or above)
+3. In Blender, head to **Edit > Preferences > Add-ons**, and select **Install From Disk** under the drop icon
+4. Select the downloaded **ZIP** file
 
 Although release versions of **BlenderNeRF** are available for download, they are primarily intended for tracking major code changes and for citation purposes. I recommend downloading the current repository directly, since minor changes or bug fixes might not be included in a release right away.
 
