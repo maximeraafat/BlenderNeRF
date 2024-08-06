@@ -1,0 +1,16 @@
+id = "BlenderNeRF"
+name = "BlenderNeRF"
+version = "6.0.0"
+type = "add-on"
+
+tagline = "Easy NeRF synthetic dataset creation within Blender"
+maintainer = "Maxime Raafat <maxime.raafat@yahoo.com>"
+website = "https://github.com/maximeraafat/BlenderNeRF"
+
+schema_version = "1.0.0"
+blender_version_min = "4.2.0"
+# blender_version_max = "5.1.0"
+
+# license conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
+# https://docs.blender.org/manual/en/dev/advanced/extensions/licenses.html
+license = ["SPDX:MIT",]

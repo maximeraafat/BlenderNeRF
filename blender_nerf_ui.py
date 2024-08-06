@@ -31,7 +31,7 @@ class BlenderNeRF_UI(bpy.types.Panel):
                 layout.prop(scene, 'render_frames')
 
             layout.prop(scene, 'logs')
-            layout.prop(scene, 'splats')
+            layout.prop(scene, 'splats', text='Gaussian Points (PLY file)')
 
             if scene.splats:
                 layout.separator()
