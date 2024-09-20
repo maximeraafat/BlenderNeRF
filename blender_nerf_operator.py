@@ -122,6 +122,10 @@ class BlenderNeRF_Operator(bpy.types.Operator):
                 if not obj.data.vertex_colors:
                     obj.data.vertex_colors.new(name=TMP_VERTEX_COLORS)
 
+        if bpy.context.object is None:
+            self.report({'INFO'}, 'No object active. Setting first object as active.')
+            bpy.context.view_layer.objects.active = bpy.data.objects[0]
+
         init_mode = bpy.context.object.mode
         bpy.ops.object.mode_set(mode='OBJECT')
 
