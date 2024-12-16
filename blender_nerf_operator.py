@@ -122,7 +122,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
                 if not obj.data.vertex_colors:
                     obj.data.vertex_colors.new(name=TMP_VERTEX_COLORS)
 
-        if bpy.context.object is None:
+        if bpy.context.object is None or bpy.context.active_object is None:
             self.report({'INFO'}, 'No object active. Setting first object as active.')
             bpy.context.view_layer.objects.active = bpy.data.objects[0]
 
@@ -144,7 +144,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         # remove temporary vertex colors
         for obj in scene.objects:
             if obj.type == 'MESH' and self.is_object_visible(obj):
-                if obj.data.vertex_colors:
+                if obj.data.vertex_colors and TMP_VERTEX_COLORS in obj.data.vertex_colors:
                     obj.data.vertex_colors.remove(obj.data.vertex_colors[TMP_VERTEX_COLORS])
 
         bpy.context.view_layer.objects.active = init_active_object
